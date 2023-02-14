@@ -1,76 +1,48 @@
 import 'package:flutter/material.dart';
 
-class ListElement extends StatelessWidget {
-  //const ListElement({Key? key}) : super(key: key);
-  const ListElement({super.key, required this.thing, required this.amount, required this.user});
+class ListItem extends StatelessWidget {
+  const ListItem(
+      {super.key,
+      required this.thing,
+      required this.amount,
+      required this.user});
 
   final String thing;
   final String amount;
   final String user;
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      color: Colors.white,
       child: Column(
         children: [
           Row(
             children: [
               Text(
                 thing,
-                style: TextStyle(fontSize: 32, color: Colors.blue),
+                style: const TextStyle(fontSize: 32, color: Colors.blue),
               ),
-              Spacer(),
+              const Spacer(),
               Text(
 //amount as String
                 amount,
-                style: TextStyle(fontSize: 32, color: Colors.blue),
+                style: const TextStyle(fontSize: 32, color: Colors.blue),
               )
             ],
           ),
           Row(
             children: [
-              Text(user, style: TextStyle(fontSize: 20, color: Colors.grey)),
-              Spacer(),
-              Text("DD.MM.YYYY",
+              Text(user, style: const TextStyle(fontSize: 20, color: Colors.grey)),
+              const Spacer(),
+              const Text("DD.MM.YYYY",
                   style: TextStyle(fontSize: 20, color: Colors.grey))
             ],
           )
         ],
       ),
     );
-    ;
   }
 }
-
-/*
-StatelessWidget listelement = Container(
-  child: Column(
-    children: [
-      Row(
-        children: const [
-          Text(
-            "thing",
-            style: TextStyle(fontSize: 32, color: Colors.blue),
-          ),
-          Spacer(),
-          Text(
-//amount as String
-            "0.0",
-            style: TextStyle(fontSize: 32, color: Colors.blue),
-          )
-        ],
-      ),
-      Row(
-        children: const [
-          Text("user", style: TextStyle(fontSize: 20, color: Colors.grey)),
-          Spacer(),
-          Text("DD.MM.YYYY",
-              style: TextStyle(fontSize: 20, color: Colors.grey))
-        ],
-      )
-    ],
-  ),
-);
-*/
