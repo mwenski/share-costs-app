@@ -4,7 +4,7 @@ import 'routes.dart';
 void main() {
   runApp(MaterialApp(
     title: "Share Cost App",
-    initialRoute: "/",
+    initialRoute: "/new_group",
     routes: Routes.routes,
   ));
 }
