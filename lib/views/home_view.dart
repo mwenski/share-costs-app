@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:share_cost_app/components/list_item.dart';
 import 'package:share_cost_app/components/balance_list_item.dart';
 import 'package:share_cost_app/routes.dart';
@@ -13,6 +17,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
   @override
   Widget build(BuildContext context) {
     void _navigateToNewExpenseView(){
