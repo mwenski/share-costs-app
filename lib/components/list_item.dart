@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 class ListItem extends StatelessWidget {
   const ListItem(
       {super.key,
-      required this.thing,
+      required this.name,
       required this.amount,
-      required this.user});
+      required this.date,
+      required this.addedBy});
 
-  final String thing;
-  final String amount;
-  final String user;
+  final String name;
+  final double amount;
+  final String date;
+  final String addedBy;
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +24,24 @@ class ListItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                thing,
+                name,
                 style: const TextStyle(fontSize: 32, color: Colors.blue),
               ),
               const Spacer(),
               Text(
 //amount as String
-                amount,
+                amount.toString(),
                 style: const TextStyle(fontSize: 32, color: Colors.blue),
               )
             ],
           ),
           Row(
             children: [
-              Text(user, style: const TextStyle(fontSize: 20, color: Colors.grey)),
+              Text(addedBy,
+                  style: const TextStyle(fontSize: 20, color: Colors.grey)),
               const Spacer(),
-              const Text("DD.MM.YYYY",
-                  style: TextStyle(fontSize: 20, color: Colors.grey))
+              Text(date,
+                  style: const TextStyle(fontSize: 20, color: Colors.grey))
             ],
           )
         ],

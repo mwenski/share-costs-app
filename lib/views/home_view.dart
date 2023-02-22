@@ -20,6 +20,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> _expensesStream = FirebaseFirestore.instance.collection('expenses').orderBy('date', descending: false).snapshots();
+
     void _navigateToNewExpenseView(){
       Navigator.pushNamed(context, Routes.newExpense);
     }
@@ -34,11 +36,22 @@ class _HomeViewState extends State<HomeView> {
             title: const Text("Share Cost App - Dashboard"),
           ),
           body: TabBarView(children: [
-            ListView(
-              children: [
-                for (var i = 0; i < 20; i++)
-                  ListItem(thing: "Test", amount: "1.0", user: "user"),
-              ],
+            StreamBuilder<QuerySnapshot>(
+              stream: _expensesStream,
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                if (snapshot.hasError) {
+                  return Text('Something went wrong');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text("Loading...");
+                }
+
+                return ListView(children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                  Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                  return ListItem(name: data['name'], amount: data['amount'], date: data['date'].toDate().toString(), addedBy: data['added_by']);
+                }).toList(),);
+              },
             ),
             ListView(
               children: [
