@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ListItem extends StatelessWidget {
-  const ListItem(
+class ExpensesListItem extends StatelessWidget {
+  const ExpensesListItem(
       {super.key,
       required this.name,
       required this.amount,
@@ -29,7 +29,6 @@ class ListItem extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-//amount as String
                 amount.toString(),
                 style: const TextStyle(fontSize: 32, color: Colors.blue),
               )
