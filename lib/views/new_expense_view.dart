@@ -15,19 +15,39 @@ class NewExpenseView extends StatefulWidget {
 class _NewExpenseViewState extends State<NewExpenseView> {
   String _name = "";
   double _amount = 0.0;
+  final _nameController = TextEditingController();
+  final _amountController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(() {
+      _name = _nameController.text;
+    });
+    _amountController.addListener(() {
+      _amount = double.parse(_amountController.text);
+    });
+  }
+
+  @override
+  void dispose(){
+    _nameController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    CollectionReference expense = FirebaseFirestore.instance.collection('expenses');
-    Future<void> addExpense(){
+    CollectionReference expense =
+        FirebaseFirestore.instance.collection('expenses');
+    Future<void> addExpense() {
       return expense
           .add({
-        'name': _name,
-        'amount': _amount,
-        'date' : DateTime.now(),
-        'added_by' : 'user'
-      })
+            'name': _name,
+            'amount': _amount,
+            'date': DateTime.now(),
+            'added_by': 'user'
+          })
           .then((value) => print("Expense Added"))
           .catchError((error) => print("Failed to add expense: $error"));
     }
@@ -40,7 +60,7 @@ class _NewExpenseViewState extends State<NewExpenseView> {
             SingleChildScrollView(
               child: Column(children: [
                 TextField(
-                  onSubmitted: (value) {_name = value;},
+                  controller: _nameController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Name',
@@ -50,7 +70,7 @@ class _NewExpenseViewState extends State<NewExpenseView> {
                   height: 10,
                 ),
                 TextField(
-                  onSubmitted: (value) {_amount = double.parse(value);},
+                  controller: _amountController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -68,7 +88,8 @@ class _NewExpenseViewState extends State<NewExpenseView> {
                       addExpense();
                       Navigator.pushNamed(context, Routes.home);
                     },
-                    child: const Text('Add expense', style: TextStyle(fontSize: 18)),
+                    child: const Text('Add expense',
+                        style: TextStyle(fontSize: 18)),
                   ),
                 ),
               ]),
@@ -77,4 +98,3 @@ class _NewExpenseViewState extends State<NewExpenseView> {
         ));
   }
 }
-
