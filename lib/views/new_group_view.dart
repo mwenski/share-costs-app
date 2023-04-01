@@ -25,7 +25,7 @@ class _NewGroupViewState extends State<NewGroupView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Share Cost App - Add new group")),
+        appBar: AppBar(title: const Text("Add new group")),
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [

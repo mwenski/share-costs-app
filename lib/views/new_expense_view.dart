@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/routes.dart';
 
-import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NewExpenseView extends StatefulWidget {
@@ -53,7 +53,7 @@ class _NewExpenseViewState extends State<NewExpenseView> {
     }
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Share Cost App - Add new expense")),
+        appBar: AppBar(title: const Text("Add new expense")),
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [
