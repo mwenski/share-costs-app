@@ -12,7 +12,7 @@ void main() async {
 
   runApp(MaterialApp(
     title: "Share Cost App",
-    initialRoute: "/",
+    initialRoute: "/group",
     routes: Routes.routes,
 
   ));

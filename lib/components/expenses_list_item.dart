@@ -10,13 +10,13 @@ class ExpensesListItem extends StatelessWidget {
       required this.name,
       required this.amount,
       required this.date,
-      required this.addedBy});
+      required this.ownerId});
 
   final String id;
   final String name;
   final double amount;
   final String date;
-  final String addedBy;
+  final String ownerId;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class ExpensesListItem extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(addedBy,
+              Text(ownerId,
                   style: const TextStyle(fontSize: 20, color: Colors.grey)),
               const Spacer(),
               Text(date,

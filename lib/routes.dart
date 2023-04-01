@@ -3,6 +3,7 @@ import 'package:share_cost_app/views/login_view.dart';
 import 'package:share_cost_app/views/new_group_view.dart';
 import 'package:share_cost_app/views/register_view.dart';
 import 'package:share_cost_app/views/new_expense_view.dart';
+import 'package:share_cost_app/views/group_list_view.dart';
 
 class Routes {
   static const String login = "/login";
@@ -10,6 +11,7 @@ class Routes {
   static const String home = "/";
   static const String newExpense = "/new_expense";
   static const String newGroup ="/new_group";
+  static const String group = "/group";
 
   static final routes = {
     login: (context) => const LoginView(),
@@ -17,5 +19,6 @@ class Routes {
     home: (context) => const HomeView(),
     newExpense: (context) => const NewExpenseView(),
     newGroup: (context) => const NewGroupView(),
+    group: (context) => const GroupListView(),
   };
 }

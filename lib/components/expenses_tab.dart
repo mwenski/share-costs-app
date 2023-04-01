@@ -33,7 +33,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
 
         return ListView(children: snapshot.data!.docs.map((DocumentSnapshot document) {
           Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-          return ExpensesListItem(id: document.id, name: data['name'], amount: data['amount'], date: data['date'].toDate().toString(), addedBy: data['added_by']);
+          return ExpensesListItem(id: document.id, name: data['name'], amount: data['amount'], date: data['date'].toDate().toString(), ownerId: data['ownerId']);
         }).toList(),);
       },
     );
