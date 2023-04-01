@@ -5,14 +5,14 @@ import 'package:share_cost_app/routes.dart';
 //import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class NewExpenseView extends StatefulWidget {
-  const NewExpenseView({Key? key}) : super(key: key);
+class ExpenseForm extends StatefulWidget {
+  const ExpenseForm({Key? key}) : super(key: key);
 
   @override
-  State<NewExpenseView> createState() => _NewExpenseViewState();
+  State<ExpenseForm> createState() => _ExpenseFormState();
 }
 
-class _NewExpenseViewState extends State<NewExpenseView> {
+class _ExpenseFormState extends State<ExpenseForm> {
   String _name = "";
   double _amount = 0.0;
   final _nameController = TextEditingController();

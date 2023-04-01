@@ -1,8 +1,8 @@
 import 'package:share_cost_app/views/home_view.dart';
 import 'package:share_cost_app/views/login_view.dart';
-import 'package:share_cost_app/views/new_group_view.dart';
+import 'package:share_cost_app/views/group_form.dart';
 import 'package:share_cost_app/views/register_view.dart';
-import 'package:share_cost_app/views/new_expense_view.dart';
+import 'package:share_cost_app/views/expense_form.dart';
 import 'package:share_cost_app/views/group_list_view.dart';
 
 class Routes {
@@ -17,8 +17,8 @@ class Routes {
     login: (context) => const LoginView(),
     register: (context) => const RegisterView(),
     home: (context) => const HomeView(),
-    newExpense: (context) => const NewExpenseView(),
-    newGroup: (context) => const NewGroupView(),
+    newExpense: (context) => const ExpenseForm(),
+    newGroup: (context) => const GroupForm(),
     group: (context) => const GroupListView(),
   };
 }

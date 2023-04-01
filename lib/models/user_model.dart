@@ -1,9 +1,12 @@
+import 'package:uuid/uuid.dart';
+
 class User {
   String id;
   String name;
-  String email;
+  String? email;
 
-  User({required this.id, required this.name, required this.email});
+  User({String? id, required this.name, this.email}): id = id ?? Uuid().v4();
+
   static User fromJson(Map<String, dynamic> json) =>
       User(id: json['id'], name: json['name'], email: json['email']);
 
