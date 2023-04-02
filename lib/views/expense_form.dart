@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/routes.dart';
+import 'package:share_cost_app/models/expense_model.dart';
 
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ExpenseForm extends StatefulWidget {
@@ -13,41 +13,20 @@ class ExpenseForm extends StatefulWidget {
 }
 
 class _ExpenseFormState extends State<ExpenseForm> {
-  String _name = "";
-  double _amount = 0.0;
-  final _nameController = TextEditingController();
-  final _amountController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController.addListener(() {
-      _name = _nameController.text;
-    });
-    _amountController.addListener(() {
-      _amount = double.parse(_amountController.text);
-    });
-  }
-
-  @override
-  void dispose(){
-    _nameController.dispose();
-    _amountController.dispose();
-    super.dispose();
-  }
+  final nameController = TextEditingController();
+  final amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference expense =
+    final groupId = ModalRoute.of(context)!.settings.arguments as String;
+
+    CollectionReference expenseCollection =
         FirebaseFirestore.instance.collection('expenses');
-    Future<void> addExpense() {
-      return expense
-          .add({
-            'name': _name,
-            'amount': _amount,
-            'date': DateTime.now(),
-            'added_by': 'user'
-          })
+    void addExpense() {
+      Expense expense = Expense(name: nameController.text, ownerId: "ownerId", groupId: groupId, amount: double.parse(amountController.text));
+
+      expenseCollection
+          .add(expense.toJson())
           .then((value) => print("Expense Added"))
           .catchError((error) => print("Failed to add expense: $error"));
     }
@@ -60,7 +39,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
             SingleChildScrollView(
               child: Column(children: [
                 TextField(
-                  controller: _nameController,
+                  controller: nameController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Name',
@@ -70,7 +49,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   height: 10,
                 ),
                 TextField(
-                  controller: _amountController,
+                  controller: amountController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -86,7 +65,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   child: ElevatedButton(
                     onPressed: () {
                       addExpense();
-                      Navigator.pushNamed(context, Routes.home);
+                      Navigator.pushNamed(context, Routes.home, arguments: groupId);
                     },
                     child: const Text('Add expense',
                         style: TextStyle(fontSize: 18)),

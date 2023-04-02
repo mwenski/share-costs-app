@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:share_cost_app/components/expenses_list_item.dart';
+import 'package:share_cost_app/models/expense_model.dart';
 
 class ExpensesTab extends StatefulWidget {
-  const ExpensesTab({Key? key}) : super(key: key);
+  const ExpensesTab({Key? key, required this.groupId}) : super(key: key);
+
+  final String groupId;
 
   @override
   State<ExpensesTab> createState() => _ExpensesTabState();
@@ -15,14 +17,15 @@ class ExpensesTab extends StatefulWidget {
 class _ExpensesTabState extends State<ExpensesTab> {
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> _expensesStream = FirebaseFirestore.instance
+    print (widget.groupId);
+    final Stream<QuerySnapshot> expensesStream = FirebaseFirestore.instance
         .collection('expenses')
-        .orderBy('date', descending: false)
+        .where('groupId', isEqualTo: widget.groupId)
         .snapshots();
 
     return StreamBuilder<QuerySnapshot>(
-      stream: _expensesStream,
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+      stream: expensesStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text('Something went wrong');
         }
@@ -31,10 +34,14 @@ class _ExpensesTabState extends State<ExpensesTab> {
           return const Text("Loading...");
         }
 
-        return ListView(children: snapshot.data!.docs.map((DocumentSnapshot document) {
-          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-          return ExpensesListItem(id: document.id, name: data['name'], amount: data['amount'], date: data['date'].toDate().toString(), ownerId: data['ownerId']);
-        }).toList(),);
+        return ListView(
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data =
+                document.data()! as Map<String, dynamic>;
+            Expense expense = Expense.fromJson(data);
+            return ExpensesListItem(expense: expense);
+          }).toList(),
+        );
       },
     );
   }

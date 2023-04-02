@@ -19,9 +19,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final groupId = ModalRoute.of(context)!.settings.arguments as String;
 
-    void _navigateToNewExpenseView(){
-      Navigator.pushNamed(context, Routes.newExpense);
+    void navigateToExpenseForm(){
+      Navigator.pushNamed(context, Routes.newExpense, arguments: groupId);
     }
 
     return DefaultTabController(
@@ -34,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
             title: const Text("Share Cost App - Dashboard"),
           ),
           body: TabBarView(children: [
-            const ExpensesTab(),
+            ExpensesTab(groupId: groupId),
             ListView(
               children: [
                 //BarChart(data: myData, bars: , xAxis: myData[0][1], yAxis: yAxis),
@@ -47,7 +48,7 @@ class _HomeViewState extends State<HomeView> {
             ),
           ]),
           floatingActionButton: FloatingActionButton(
-            onPressed: _navigateToNewExpenseView,
+            onPressed: navigateToExpenseForm,
             tooltip: "Add new expense",
             child: const Icon(Icons.add),
           ),
