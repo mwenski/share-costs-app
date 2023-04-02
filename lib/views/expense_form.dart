@@ -65,7 +65,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   child: ElevatedButton(
                     onPressed: () {
                       addExpense();
-                      Navigator.pushNamed(context, Routes.home, arguments: groupId);
+                      Navigator.pop(context);
                     },
                     child: const Text('Add expense',
                         style: TextStyle(fontSize: 18)),

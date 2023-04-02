@@ -135,7 +135,7 @@ class _GroupFormState extends State<GroupForm> {
                   child: ElevatedButton(
                     onPressed: () {
                       addGroup();
-                      Navigator.pushNamed(context, Routes.group);
+                      Navigator.pop(context);
                     },
                     child: const Text('Create New Group!',
                         style: TextStyle(fontSize: 18)),

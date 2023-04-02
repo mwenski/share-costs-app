@@ -8,7 +8,7 @@ import 'package:share_cost_app/views/group_list_view.dart';
 class Routes {
   static const String login = "/login";
   static const String register = "/register";
-  static const String home = "/";
+  static const String home = "/home";
   static const String newExpense = "/new_expense";
   static const String newGroup ="/new_group";
   static const String group = "/group";
