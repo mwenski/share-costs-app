@@ -7,6 +7,8 @@ class Expense {
   String ownerId;
   String groupId;
   double amount;
+  String paidBy;
+  String paidFor;
   DateTime date;
 
   Expense(
@@ -15,6 +17,8 @@ class Expense {
       required this.ownerId,
       required this.groupId,
       required this.amount,
+        required this.paidBy,
+      required this.paidFor,
       DateTime? date})
       : id = id ?? Uuid().v4(), date = date ?? DateTime.now();
 
@@ -24,6 +28,8 @@ class Expense {
       ownerId: json['ownerId'],
       groupId: json['groupId'],
       amount: json['amount'],
+      paidBy: json['paidBy'],
+      paidFor: json['paidFor'],
       date: (json['date'] as Timestamp).toDate());
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -32,6 +38,8 @@ class Expense {
         'ownerId': ownerId,
         'groupId': groupId,
         'amount': amount,
+        'paidBy': paidBy,
+        'paidFor': paidFor,
         'date': date
       };
 }

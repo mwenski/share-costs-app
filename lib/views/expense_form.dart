@@ -15,6 +15,8 @@ class ExpenseForm extends StatefulWidget {
 class _ExpenseFormState extends State<ExpenseForm> {
   final nameController = TextEditingController();
   final amountController = TextEditingController();
+  final paidByController = TextEditingController();
+  final paidForController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,13 @@ class _ExpenseFormState extends State<ExpenseForm> {
     CollectionReference expenseCollection =
         FirebaseFirestore.instance.collection('expenses');
     void addExpense() {
-      Expense expense = Expense(name: nameController.text, ownerId: "ownerId", groupId: groupId, amount: double.parse(amountController.text));
+      Expense expense = Expense(
+          name: nameController.text,
+          ownerId: "ownerId",
+          groupId: groupId,
+          amount: double.parse(amountController.text),
+          paidBy: paidByController.text,
+          paidFor: paidForController.text);
 
       expenseCollection
           .add(expense.toJson())
@@ -54,6 +62,26 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Amount',
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: paidByController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Paid by...',
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: paidForController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Paid for...',
                   ),
                 ),
                 const SizedBox(
