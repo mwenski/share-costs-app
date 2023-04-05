@@ -25,9 +25,6 @@ class _BalanceTabState extends State<BalanceTab> {
     return StreamBuilder<QuerySnapshot>(
       stream: balanceStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        List <String> paidFor = <String>[];
-        List <String> paidBy = <String>[];
-
         if (snapshot.hasError) {
           return const Text('Something went wrong');
         }
@@ -36,18 +33,50 @@ class _BalanceTabState extends State<BalanceTab> {
           return const Text("Loading...");
         }
 
+        List<Expense> expenses =
+            snapshot.data!.docs.map((DocumentSnapshot document) {
+          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+          Expense expense = Expense.fromJson(data);
+          return expense;
+        }).toList();
+
+        //Balance calculations start here
+        List<Map<String, dynamic>> balanceList = <Map<String, dynamic>>[];
+        Map<String, double> balance = {};
+
+        expenses.forEach((expense) {
+          if (balanceList.any((element) =>
+              (element['paidFor'] == expense.paidFor &&
+                  element['paidBy'] == expense.paidBy))) {
+            var balanceElement = balanceList.firstWhere((element) =>
+                (element['paidFor'] == expense.paidFor &&
+                    element['paidBy'] == expense.paidBy));
+            balanceElement['amount'] += expense.amount;
+          } else {
+            balanceList.add({
+              'paidFor': expense.paidFor,
+              'paidBy': expense.paidBy,
+              'amount': expense.amount
+            });
+          }
+
+          balance[expense.paidBy] = (balance[expense.paidBy] == null)
+              ? expense.amount
+              : balance[expense.paidBy]! + expense.amount;
+          balance[expense.paidFor] = (balance[expense.paidFor] == null)
+              ? -expense.amount
+              : balance[expense.paidFor]! - expense.amount;
+        });
+
+        print(balance);
+
+        //Balance calculations end here
         return ListView(
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-            Expense expense = Expense.fromJson(data);
-
-            if(paidBy.contains(expense.paidBy) == false){paidBy.add(expense.paidBy);}
-            if(paidFor.contains(expense.paidFor) == false){paidFor.add(expense.paidFor);}
-
-            print(paidFor + <String>[" "] + paidBy);
-
+          children: balanceList.map((balanceElement) {
             return BalanceListItem(
-                sender: "user1", recipient: "user2", amount: "1.0");
+                paidFor: balanceElement['paidFor'],
+                paidBy: balanceElement['paidBy'],
+                amount: balanceElement['amount'].toString());
           }).toList(),
         );
       },

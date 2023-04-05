@@ -33,8 +33,7 @@ class _GroupListState extends State<GroupList> {
 
         return ListView(
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data =
-                document.data()! as Map<String, dynamic>;
+            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
             Group group = Group.fromJson(data);
             print (group);
             return GroupsListItem(group: group);

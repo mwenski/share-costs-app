@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class BalanceListItem extends StatelessWidget {
   const BalanceListItem(
       {super.key,
-      required this.sender,
-      required this.recipient,
+      required this.paidFor,
+      required this.paidBy,
       required this.amount});
 
-  final String sender;
-  final String recipient;
+  final String paidFor;
+  final String paidBy;
   final String amount;
 
   @override
@@ -22,7 +22,7 @@ class BalanceListItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                sender,
+                paidFor,
                 style: const TextStyle(fontSize: 32, color: Colors.blue),
               ),
             ],
@@ -40,7 +40,7 @@ class BalanceListItem extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(recipient,
+              Text(paidBy,
                   style: const TextStyle(fontSize: 32, color: Colors.blue)),
             ],
           )
