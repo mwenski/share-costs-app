@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/routes.dart';
 
@@ -43,6 +44,9 @@ class GroupsListItem extends StatelessWidget {
                 style: const TextStyle(fontSize: 20, color: Colors.grey)),
             Text(group.date.toString(),
                 style: const TextStyle(fontSize: 20, color: Colors.grey)),
+            Row(children: [
+              TextButton(onPressed: ()=>{removeGroup(group.id)}, child: const Text("Remove group"))
+            ],)
           ],
         ),
       ),

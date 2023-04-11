@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:share_cost_app/models/expense_model.dart';
+import 'package:share_cost_app/services/db_operations.dart';
 
 class ExpensesListItem extends StatelessWidget {
   const ExpensesListItem(
@@ -14,14 +12,6 @@ class ExpensesListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    // void removeExpense(){
-    //   FirebaseFirestore.instance
-    //       .collection("expenses")
-    //       .doc(id)
-    //       .delete()
-    //       .then((_) {print("Expense Removed");});
-    // }
 
     return Container(
       margin: const EdgeInsets.all(2.0),
@@ -51,9 +41,9 @@ class ExpensesListItem extends StatelessWidget {
                   style: const TextStyle(fontSize: 20, color: Colors.grey))
             ],
           ),
-          // Row(children: [
-          //   TextButton(onPressed: removeExpense, child: const Text("Remove expense"))
-          // ],)
+          Row(children: [
+            TextButton(onPressed: ()=>{removeExpense(expense.id)}, child: const Text("Remove expense"))
+          ],)
         ],
       ),
     );

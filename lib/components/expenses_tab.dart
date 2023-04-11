@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/components/expenses_list_item.dart';
 import 'package:share_cost_app/models/expense_model.dart';
 
@@ -17,11 +18,7 @@ class ExpensesTab extends StatefulWidget {
 class _ExpensesTabState extends State<ExpensesTab> {
   @override
   Widget build(BuildContext context) {
-    print (widget.groupId);
-    final Stream<QuerySnapshot> expensesStream = FirebaseFirestore.instance
-        .collection('expenses')
-        .where('groupId', isEqualTo: widget.groupId)
-        .snapshots();
+    final Stream<QuerySnapshot> expensesStream = getExpensesStream(widget.groupId);
 
     return StreamBuilder<QuerySnapshot>(
       stream: expensesStream,

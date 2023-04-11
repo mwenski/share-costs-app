@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:share_cost_app/models/expense_model.dart';
+import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/components/balance_list_item.dart';
 
 class BalanceTab extends StatefulWidget {
@@ -17,10 +18,7 @@ class BalanceTab extends StatefulWidget {
 class _BalanceTabState extends State<BalanceTab> {
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> balanceStream = FirebaseFirestore.instance
-        .collection('expenses')
-        .where('groupId', isEqualTo: widget.groupId)
-        .snapshots();
+    final Stream<QuerySnapshot> balanceStream = getExpensesStream(widget.groupId);
 
     return StreamBuilder<QuerySnapshot>(
       stream: balanceStream,
@@ -33,12 +31,7 @@ class _BalanceTabState extends State<BalanceTab> {
           return const Text("Loading...");
         }
 
-        List<Expense> expenses =
-            snapshot.data!.docs.map((DocumentSnapshot document) {
-          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-          Expense expense = Expense.fromJson(data);
-          return expense;
-        }).toList();
+        List<Expense> expenses = getExpenses(snapshot);
 
         //Balance calculations start here
         List<Map<String, dynamic>> balanceList = <Map<String, dynamic>>[];
@@ -68,7 +61,19 @@ class _BalanceTabState extends State<BalanceTab> {
               : balance[expense.paidFor]! - expense.amount;
         });
 
-        print(balance);
+        for(var i=0; i<balanceList.length; i++){
+          for(var j=i; j<balanceList.length; j++){
+            if(balanceList[i]['paidFor']==balanceList[j]['paidBy'] && balanceList[j]['paidFor']==balanceList[i]['paidBy']){
+              if(balanceList[i]['amount']>balanceList[j]['amount']){
+                balanceList[i]['amount'] -= balanceList[j]['amount'];
+                balanceList.removeAt(j);
+              }else if(balanceList[i]['amount']>balanceList[j]['amount']){
+                balanceList[j]['amount'] -= balanceList[i]['amount'];
+                balanceList.removeAt(i);
+              }
+            }
+          }
+        }
 
         //Balance calculations end here
         return ListView(
