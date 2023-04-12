@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/models/expense_model.dart';
+import 'package:share_cost_app/models/user_model.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:share_cost_app/services/db_operations.dart';
 
 class ExpenseForm extends StatefulWidget {
   const ExpenseForm({Key? key}) : super(key: key);
@@ -38,6 +40,9 @@ class _ExpenseFormState extends State<ExpenseForm> {
           .then((value) => print("Expense Added"))
           .catchError((error) => print("Failed to add expense: $error"));
     }
+
+    // Future<List<User>> listOfUsers = getUsers(groupId);
+    // List<User> list = await listOfUsers as List<User>;
 
     return Scaffold(
         appBar: AppBar(title: const Text("Add new expense")),
@@ -74,9 +79,14 @@ class _ExpenseFormState extends State<ExpenseForm> {
                     labelText: 'Paid by...',
                   ),
                 ),
+                // DropdownButton<String>(
+                //   items: listOfUsers.map,
+                //   onChanged: (v){},
+                // ),
                 const SizedBox(
                   height: 10,
                 ),
+                //DropdownButton(items: , onChanged: null),
                 TextField(
                   controller: paidForController,
                   decoration: const InputDecoration(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:share_cost_app/models/expense_model.dart';
+import 'package:share_cost_app/models/group_model.dart';
+import 'package:share_cost_app/models/user_model.dart';
 
 Stream<QuerySnapshot> getExpensesStream(String groupId) {
   return FirebaseFirestore.instance
@@ -17,6 +19,24 @@ List<Expense> getExpenses(AsyncSnapshot<QuerySnapshot> snapshot) {
     return expense;
   }).toList();
   return expenses;
+}
+
+Future<List<User>> getUsers(String id) async {
+  List<User> users = [];
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('group')
+      .where('id', isEqualTo: id)
+      .get();
+
+  querySnapshot.docs.forEach((element) {
+    Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+    Group group = Group.fromJson(data);
+      for (User member in group.members) {
+      users.add(member);
+    }
+  });
+
+  return users;
 }
 
 Future<void> removeExpense(String id) async {
