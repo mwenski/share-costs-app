@@ -45,7 +45,7 @@ class GroupsListItem extends StatelessWidget {
             Text(group.date.toString(),
                 style: const TextStyle(fontSize: 20, color: Colors.grey)),
             Row(children: [
-              TextButton(onPressed: ()=>{removeGroup(group.id)}, child: const Text("Remove group"))
+              TextButton(onPressed: ()=>{DbOperations.removeGroup(group.id)}, child: const Text("Remove group"))
             ],)
           ],
         ),

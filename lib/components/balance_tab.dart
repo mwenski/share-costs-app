@@ -18,7 +18,7 @@ class BalanceTab extends StatefulWidget {
 class _BalanceTabState extends State<BalanceTab> {
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> balanceStream = getExpensesStream(widget.groupId);
+    final Stream<QuerySnapshot> balanceStream = DbOperations.getExpensesStream(widget.groupId);
 
     return StreamBuilder<QuerySnapshot>(
       stream: balanceStream,
@@ -31,7 +31,7 @@ class _BalanceTabState extends State<BalanceTab> {
           return const Text("Loading...");
         }
 
-        List<Expense> expenses = getExpenses(snapshot);
+        List<Expense> expenses = DbOperations.getExpenses(snapshot);
 
         //Balance calculations start here
         List<Map<String, dynamic>> balanceList = <Map<String, dynamic>>[];

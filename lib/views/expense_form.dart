@@ -19,10 +19,24 @@ class _ExpenseFormState extends State<ExpenseForm> {
   final amountController = TextEditingController();
   final paidByController = TextEditingController();
   final paidForController = TextEditingController();
+  String paidByValue = "";
+  String paidForValue = "";
 
   @override
   Widget build(BuildContext context) {
     final groupId = ModalRoute.of(context)!.settings.arguments as String;
+
+    Future<void> getUsers(String id) async {
+      await DbOperations.getUsers(id);
+      print("Test${DbOperations.members}");
+    }
+
+    setState(() {
+      getUsers(groupId);
+      paidByValue = DbOperations.members[0].id;
+      paidForValue = DbOperations.members[1].id;
+    });
+
 
     CollectionReference expenseCollection =
         FirebaseFirestore.instance.collection('expenses');
@@ -32,17 +46,14 @@ class _ExpenseFormState extends State<ExpenseForm> {
           ownerId: "ownerId",
           groupId: groupId,
           amount: double.parse(amountController.text),
-          paidBy: paidByController.text,
-          paidFor: paidForController.text);
+          paidBy: paidByValue,
+          paidFor: paidForValue);
 
       expenseCollection
           .add(expense.toJson())
           .then((value) => print("Expense Added"))
           .catchError((error) => print("Failed to add expense: $error"));
     }
-
-    // Future<List<User>> listOfUsers = getUsers(groupId);
-    // List<User> list = await listOfUsers as List<User>;
 
     return Scaffold(
         appBar: AppBar(title: const Text("Add new expense")),
@@ -72,27 +83,49 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                TextField(
-                  controller: paidByController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Paid by...',
-                  ),
-                ),
-                // DropdownButton<String>(
-                //   items: listOfUsers.map,
-                //   onChanged: (v){},
+                // TextField(
+                //   controller: paidByController,
+                //   decoration: const InputDecoration(
+                //     border: OutlineInputBorder(),
+                //     labelText: 'Paid by...',
+                //   ),
                 // ),
+                DropdownButtonFormField(
+                  hint: const Text('Paid by...'),
+                  value: paidByValue,
+                  items: DbOperations.members == null
+                      ? []
+                      : DbOperations.members.map((member) {
+                          return DropdownMenuItem<String>(
+                            value: member.id,
+                            child: Text(member.name),
+                          );
+                        }).toList(),
+                  onChanged: (value) => paidByValue = value as String,
+                ),
                 const SizedBox(
                   height: 10,
                 ),
                 //DropdownButton(items: , onChanged: null),
-                TextField(
-                  controller: paidForController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Paid for...',
-                  ),
+                // TextField(
+                //   controller: paidForController,
+                //   decoration: const InputDecoration(
+                //     border: OutlineInputBorder(),
+                //     labelText: 'Paid for...',
+                //   ),
+                // ),
+                DropdownButtonFormField(
+                  hint: const Text('Paid for...'),
+                  value: paidForValue,
+                  items: DbOperations.members == null
+                      ? []
+                      : DbOperations.members.map((member) {
+                    return DropdownMenuItem<String>(
+                      value: member.id,
+                      child: Text(member.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) => paidForValue = value as String,
                 ),
                 const SizedBox(
                   height: 10,

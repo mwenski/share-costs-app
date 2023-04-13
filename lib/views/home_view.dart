@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 //import 'package:firebase_auth/firebase_auth.dart';
+import 'package:share_cost_app/services/db_operations.dart';
 
 import 'package:share_cost_app/components/expenses_tab.dart';
 import 'package:share_cost_app/components/balance_tab.dart';

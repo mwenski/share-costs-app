@@ -42,7 +42,7 @@ class ExpensesListItem extends StatelessWidget {
             ],
           ),
           Row(children: [
-            TextButton(onPressed: ()=>{removeExpense(expense.id)}, child: const Text("Remove expense"))
+            TextButton(onPressed: ()=>{DbOperations.removeExpense(expense.id)}, child: const Text("Remove expense"))
           ],)
         ],
       ),

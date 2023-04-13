@@ -18,7 +18,7 @@ class ExpensesTab extends StatefulWidget {
 class _ExpensesTabState extends State<ExpensesTab> {
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> expensesStream = getExpensesStream(widget.groupId);
+    final Stream<QuerySnapshot> expensesStream = DbOperations.getExpensesStream(widget.groupId);
 
     return StreamBuilder<QuerySnapshot>(
       stream: expensesStream,
