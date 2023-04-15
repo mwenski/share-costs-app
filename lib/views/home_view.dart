@@ -7,8 +7,6 @@ import 'package:share_cost_app/components/expenses_tab.dart';
 import 'package:share_cost_app/components/balance_tab.dart';
 import 'package:share_cost_app/routes.dart';
 
-import 'package:fcharts/fcharts.dart';
-
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 

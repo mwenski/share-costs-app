@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 class BalanceListItem extends StatelessWidget {
   const BalanceListItem(
@@ -21,10 +22,14 @@ class BalanceListItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                paidFor,
+              Flexible(
+                child: TextScroll(paidFor,
                 style: const TextStyle(fontSize: 32, color: Colors.blue),
-              ),
+                intervalSpaces: 10,
+                velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
+                pauseBetween: Duration(seconds: 1),
+                ),
+              )
             ],
           ),
           Row(
@@ -40,8 +45,14 @@ class BalanceListItem extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(paidBy,
-                  style: const TextStyle(fontSize: 32, color: Colors.blue)),
+              Flexible(
+                child: TextScroll(paidBy,
+                  style: const TextStyle(fontSize: 32, color: Colors.blue),
+                  intervalSpaces: 10,
+                  velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
+                  pauseBetween: Duration(seconds: 1),
+                ),
+              )
             ],
           )
         ],

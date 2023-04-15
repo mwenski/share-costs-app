@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/models/group_model.dart';
@@ -28,11 +29,14 @@ class GroupsListItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(
-                  group.name,
-                  style: const TextStyle(fontSize: 32, color: Colors.blue),
-                ),
-                // const Spacer()
+                Flexible(
+                  child: TextScroll(group.name,
+                    style: const TextStyle(fontSize: 32, color: Colors.blue),
+                    intervalSpaces: 10,
+                    velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
+                    pauseBetween: Duration(seconds: 1),
+                  ),
+                )
               ],
             ),
             Text(group.ownerId,
