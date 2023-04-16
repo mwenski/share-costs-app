@@ -51,6 +51,11 @@ class _GroupFormState extends State<GroupForm> {
         .add(group.toJson())
         .then((value) => print("Expense Added"))
         .catchError((error) => print("Failed to add expense: $error"));
+
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(const SnackBar(
+      content: Text("Group created!"),
+    ));
   }
 
   @override

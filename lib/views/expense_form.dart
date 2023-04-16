@@ -37,7 +37,6 @@ class _ExpenseFormState extends State<ExpenseForm> {
       paidForValue = DbOperations.members[1].id;
     });
 
-
     CollectionReference expenseCollection =
         FirebaseFirestore.instance.collection('expenses');
     void addExpense() {
@@ -53,6 +52,23 @@ class _ExpenseFormState extends State<ExpenseForm> {
           .add(expense.toJson())
           .then((value) => print("Expense Added"))
           .catchError((error) => print("Failed to add expense: $error"));
+    }
+
+    void checkIfCanBeAdded() {
+      final scaffold = ScaffoldMessenger.of(context);
+      if (paidByValue != paidForValue) {
+        addExpense();
+        Navigator.pop(context);
+        scaffold.showSnackBar(const SnackBar(
+          content: Text("Expense added!"),
+        ));
+      } else {
+        scaffold.showSnackBar(SnackBar(
+          content: const Text("'Paid by...' cannot be equal to 'Paid for...'!"),
+          action: SnackBarAction(
+              label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
+        ));
+      }
     }
 
     return Scaffold(
@@ -120,11 +136,11 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   items: DbOperations.members == null
                       ? []
                       : DbOperations.members.map((member) {
-                    return DropdownMenuItem<String>(
-                      value: member.id,
-                      child: Text(member.name),
-                    );
-                  }).toList(),
+                          return DropdownMenuItem<String>(
+                            value: member.id,
+                            child: Text(member.name),
+                          );
+                        }).toList(),
                   onChanged: (value) => paidForValue = value as String,
                 ),
                 const SizedBox(
@@ -134,10 +150,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   width: double.infinity,
                   height: 60,
                   child: ElevatedButton(
-                    onPressed: () {
-                      addExpense();
-                      Navigator.pop(context);
-                    },
+                    onPressed: () {checkIfCanBeAdded();},
                     child: const Text('Add expense',
                         style: TextStyle(fontSize: 18)),
                   ),

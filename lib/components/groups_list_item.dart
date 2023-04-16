@@ -19,6 +19,15 @@ class GroupsListItem extends StatelessWidget {
       Navigator.pushNamed(context, Routes.home, arguments: group.id);
     }
 
+    void removeGroup(){
+      DbOperations.removeGroup(group.id);
+
+      final scaffold = ScaffoldMessenger.of(context);
+      scaffold.showSnackBar(const SnackBar(
+        content: Text("Group deleted!"),
+      ));
+    }
+
     return GestureDetector(
       onTap: _navigateToGroupView,
       child: Container(
@@ -49,7 +58,7 @@ class GroupsListItem extends StatelessWidget {
             Text(group.date.toString(),
                 style: const TextStyle(fontSize: 20, color: Colors.grey)),
             Row(children: [
-              TextButton(onPressed: ()=>{DbOperations.removeGroup(group.id)}, child: const Text("Remove group"))
+              TextButton(onPressed: ()=>{removeGroup()}, child: const Text("Remove group"))
             ],)
           ],
         ),

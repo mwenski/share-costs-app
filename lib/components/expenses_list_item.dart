@@ -12,6 +12,14 @@ class ExpensesListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void removeExpense(){
+      DbOperations.removeExpense(expense.id);
+
+      final scaffold = ScaffoldMessenger.of(context);
+      scaffold.showSnackBar(const SnackBar(
+        content: Text("Expense deleted!"),
+      ));
+    }
 
     return Container(
       margin: const EdgeInsets.all(2.0),
@@ -42,7 +50,7 @@ class ExpensesListItem extends StatelessWidget {
             ],
           ),
           Row(children: [
-            TextButton(onPressed: ()=>{DbOperations.removeExpense(expense.id)}, child: const Text("Remove expense"))
+            TextButton(onPressed: ()=>{removeExpense()}, child: const Text("Remove expense"))
           ],)
         ],
       ),
