@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:share_cost_app/services/authentication.dart';
+
+import 'package:share_cost_app/routes.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -8,17 +11,22 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  var confirmPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Share Cost App - Login")),
+        appBar: AppBar(title: const Text("Share Cost App - Register")),
         body: ListView(
           padding: const EdgeInsets.all(40),
           children: [
             SingleChildScrollView(
               child: Column(children: [
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'E-mail address',
                   ),
@@ -26,9 +34,10 @@ class _RegisterViewState extends State<RegisterView> {
                 const SizedBox(
                   height: 10,
                 ),
-                const TextField(
+                TextField(
+                  controller: passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password',
                   ),
@@ -36,9 +45,10 @@ class _RegisterViewState extends State<RegisterView> {
                 const SizedBox(
                   height: 10,
                 ),
-                const TextField(
+                TextField(
+                  controller: confirmPasswordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Confirm password',
                   ),
@@ -47,7 +57,21 @@ class _RegisterViewState extends State<RegisterView> {
                   height: 20,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if(passwordController.text == confirmPasswordController.text){
+                      var res = await Authentication.userRegistration(emailController.text, passwordController.text);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: res == null ? Colors.green : Colors.red,
+                        content: Text(res ?? "Registered and logged in!")));
+                      if (res == null){
+                        Navigator.pushNamed(context, Routes.group);
+                      }
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text("Passwords are not equal!")));
+                    }
+                  },
                   child: const Text('Create an account!'),
                 ),
               ]),

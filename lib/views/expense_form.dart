@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/models/expense_model.dart';
 import 'package:share_cost_app/models/user_model.dart';
 
@@ -61,10 +60,12 @@ class _ExpenseFormState extends State<ExpenseForm> {
         Navigator.pop(context);
         scaffold.showSnackBar(const SnackBar(
           content: Text("Expense added!"),
+          backgroundColor: Colors.green,
         ));
       } else {
         scaffold.showSnackBar(SnackBar(
           content: const Text("'Paid by...' cannot be equal to 'Paid for...'!"),
+          backgroundColor: Colors.red,
           action: SnackBarAction(
               label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
         ));

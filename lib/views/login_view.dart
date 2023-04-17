@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_cost_app/routes.dart';
+import 'package:share_cost_app/services/authentication.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -9,6 +10,9 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     void _navigateToRegister() {
@@ -22,8 +26,9 @@ class _LoginViewState extends State<LoginView> {
           children: [
             SingleChildScrollView(
               child: Column(children: [
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'E-mail address',
                   ),
@@ -31,9 +36,10 @@ class _LoginViewState extends State<LoginView> {
                 const SizedBox(
                   height: 10,
                 ),
-                const TextField(
+                TextField(
+                  controller: passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password',
                   ),
@@ -42,7 +48,16 @@ class _LoginViewState extends State<LoginView> {
                   height: 20,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var res = await Authentication.signIn(emailController.text, passwordController.text);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            backgroundColor: res == null ? Colors.green : Colors.red,
+                            content: Text(res ?? "Logged in!")));
+                    if (res == null){
+                      Navigator.pushNamed(context, Routes.group);
+                    }
+                  },
                   child: const Text('Login!'),
                 ),
                 TextButton(

@@ -14,10 +14,9 @@ class ExpensesListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     void removeExpense(){
       DbOperations.removeExpense(expense.id);
-
-      final scaffold = ScaffoldMessenger.of(context);
-      scaffold.showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Expense deleted!"),
+        backgroundColor: Colors.green,
       ));
     }
 
