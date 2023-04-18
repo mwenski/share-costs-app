@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/models/user_model.dart';
+import 'package:share_cost_app/services/authentication.dart';
 
 class GroupForm extends StatefulWidget {
   const GroupForm({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _GroupFormState extends State<GroupForm> {
       FirebaseFirestore.instance.collection('group');
   void addGroup() {
     Group group = Group(
-        ownerId: "ownerId",
+        ownerId: Authentication.getCurrentUser() as String,
         name: nameController.text,
         description: descriptionController.text,
         members: memberControllers

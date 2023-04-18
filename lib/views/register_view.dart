@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:share_cost_app/services/authentication.dart';
 
+import 'package:share_cost_app/services/authentication.dart';
 import 'package:share_cost_app/routes.dart';
 
 class RegisterView extends StatefulWidget {

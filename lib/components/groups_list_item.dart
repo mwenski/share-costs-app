@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:text_scroll/text_scroll.dart';
 
+import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/models/group_model.dart';
-import 'package:share_cost_app/routes.dart';
 
 class GroupsListItem extends StatelessWidget {
   const GroupsListItem(

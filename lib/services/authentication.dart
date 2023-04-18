@@ -39,5 +39,10 @@ class Authentication{
     return logged;
   }
 
+  static String? getCurrentUser(){
+    final User? user = FirebaseAuth.instance.currentUser;
+    return user?.uid.toString();
+  }
+
 
 }

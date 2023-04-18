@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter_new/flutter.dart' as charts;
+
 import 'package:share_cost_app/models/balance_model.dart';
 
 class BalanceChart extends StatelessWidget {

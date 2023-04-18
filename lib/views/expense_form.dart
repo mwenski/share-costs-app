@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:share_cost_app/models/expense_model.dart';
-import 'package:share_cost_app/models/user_model.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:share_cost_app/services/authentication.dart';
 import 'package:share_cost_app/services/db_operations.dart';
-
-import '../models/group_model.dart';
+import 'package:share_cost_app/models/group_model.dart';
 
 class ExpenseForm extends StatefulWidget {
   const ExpenseForm({Key? key}) : super(key: key);
@@ -45,7 +43,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
     void addExpense() {
       Expense expense = Expense(
           name: nameController.text,
-          ownerId: "ownerId",
+          ownerId: Authentication.getCurrentUser() as String,
           groupId: group.id,
           amount: double.parse(amountController.text),
           paidBy: paidByValue,

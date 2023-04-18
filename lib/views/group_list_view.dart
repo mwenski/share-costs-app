@@ -12,6 +12,11 @@ class GroupListView extends StatefulWidget {
 
 class _GroupListViewState extends State<GroupListView> {
   @override
+  void initState(){
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     void _navigateToNewGroupView() {
       Navigator.pushNamed(context, Routes.newGroup);

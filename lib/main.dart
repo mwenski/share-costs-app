@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'routes.dart';
-
 import 'package:firebase_core/firebase_core.dart';
+
+import 'routes.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -12,7 +12,7 @@ void main() async {
 
   runApp(MaterialApp(
     title: "Share Cost App",
-    initialRoute: Routes.group,
+    initialRoute: Routes.login,
     routes: Routes.routes,
 
   ));
