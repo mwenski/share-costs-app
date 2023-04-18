@@ -16,7 +16,7 @@ class BalanceChart extends StatelessWidget {
           data: membersBalance,
           domainFn: (Balance data, _) => data.name,
           measureFn: (Balance data, _) => data.amount,
-          colorFn: (Balance data, _) => data.barColor,
+          colorFn: (Balance data, _) => data.amount<0 ? charts.ColorUtil.fromDartColor(Colors.red) : charts.ColorUtil.fromDartColor(Colors.green),
           labelAccessorFn: (Balance data, _) => '${data.name} | ${data.amount}')
     ];
 

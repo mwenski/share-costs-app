@@ -16,7 +16,7 @@ class GroupsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
 
     void _navigateToGroupView(){
-      Navigator.pushNamed(context, Routes.home, arguments: group.id);
+      Navigator.pushNamed(context, Routes.home, arguments: group);
     }
 
     void removeGroup(){

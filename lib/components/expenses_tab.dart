@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:share_cost_app/models/group_model.dart';
 
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/components/expenses_list_item.dart';
 import 'package:share_cost_app/models/expense_model.dart';
 
 class ExpensesTab extends StatefulWidget {
-  const ExpensesTab({Key? key, required this.groupId}) : super(key: key);
+  const ExpensesTab({Key? key, required this.group}) : super(key: key);
 
-  final String groupId;
+  final Group group;
 
   @override
   State<ExpensesTab> createState() => _ExpensesTabState();
@@ -18,7 +19,7 @@ class ExpensesTab extends StatefulWidget {
 class _ExpensesTabState extends State<ExpensesTab> {
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> expensesStream = DbOperations.getExpensesStream(widget.groupId);
+    final Stream<QuerySnapshot> expensesStream = DbOperations.getExpensesStream(widget.group.id);
 
     return StreamBuilder<QuerySnapshot>(
       stream: expensesStream,

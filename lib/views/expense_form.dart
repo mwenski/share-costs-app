@@ -6,6 +6,8 @@ import 'package:share_cost_app/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 
+import '../models/group_model.dart';
+
 class ExpenseForm extends StatefulWidget {
   const ExpenseForm({Key? key}) : super(key: key);
 
@@ -23,7 +25,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
 
   @override
   Widget build(BuildContext context) {
-    final groupId = ModalRoute.of(context)!.settings.arguments as String;
+    final group = ModalRoute.of(context)!.settings.arguments as Group;
 
     Future<void> getUsers(String id) async {
       await DbOperations.getUsers(id);
@@ -31,9 +33,11 @@ class _ExpenseFormState extends State<ExpenseForm> {
     }
 
     setState(() {
-      getUsers(groupId);
-      paidByValue = DbOperations.members[0].id;
-      paidForValue = DbOperations.members[1].id;
+      getUsers(group.id);
+      // paidByValue = DbOperations.members[0].id;
+      // paidForValue = DbOperations.members[1].id;
+      paidByValue = group.members[0].id;
+      paidForValue = group.members[1].id;
     });
 
     CollectionReference expenseCollection =
@@ -42,7 +46,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
       Expense expense = Expense(
           name: nameController.text,
           ownerId: "ownerId",
-          groupId: groupId,
+          groupId: group.id,
           amount: double.parse(amountController.text),
           paidBy: paidByValue,
           paidFor: paidForValue);
@@ -110,9 +114,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 DropdownButtonFormField(
                   hint: const Text('Paid by...'),
                   value: paidByValue,
-                  items: DbOperations.members == null
-                      ? []
-                      : DbOperations.members.map((member) {
+                  items: group.members.map((member) {
                           return DropdownMenuItem<String>(
                             value: member.id,
                             child: Text(member.name),
@@ -134,9 +136,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 DropdownButtonFormField(
                   hint: const Text('Paid for...'),
                   value: paidForValue,
-                  items: DbOperations.members == null
-                      ? []
-                      : DbOperations.members.map((member) {
+                  items: group.members.map((member) {
                           return DropdownMenuItem<String>(
                             value: member.id,
                             child: Text(member.name),

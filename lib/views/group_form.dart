@@ -13,7 +13,7 @@ class GroupForm extends StatefulWidget {
 
 class _GroupFormState extends State<GroupForm> {
   List<TextEditingController> memberControllers = <TextEditingController>[
-    TextEditingController()
+    TextEditingController(), TextEditingController()
   ];
 
   var nameController = TextEditingController();
@@ -26,7 +26,7 @@ class _GroupFormState extends State<GroupForm> {
   }
 
   void _removeMemberFromList() {
-    if (memberControllers.length <= 1) {
+    if (memberControllers.length <= 2) {
       return;
     }
     setState(() {

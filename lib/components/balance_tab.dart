@@ -5,13 +5,14 @@ import 'package:share_cost_app/components/balance_chart.dart';
 
 import 'package:share_cost_app/models/expense_model.dart';
 import 'package:share_cost_app/models/balance_model.dart';
+import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/components/balance_list_item.dart';
 
 class BalanceTab extends StatefulWidget {
-  const BalanceTab({Key? key, required this.groupId}) : super(key: key);
+  const BalanceTab({Key? key, required this.group}) : super(key: key);
 
-  final String groupId;
+  final Group group;
 
   @override
   State<BalanceTab> createState() => _BalanceTabState();
@@ -21,7 +22,7 @@ class _BalanceTabState extends State<BalanceTab> {
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> balanceStream =
-        DbOperations.getExpensesStream(widget.groupId);
+        DbOperations.getExpensesStream(widget.group.id);
 
     return StreamBuilder<QuerySnapshot>(
       stream: balanceStream,
@@ -51,12 +52,8 @@ class _BalanceTabState extends State<BalanceTab> {
         }
 
         expenses.forEach((expense) {
-          if (balanceList.any((element) =>
-              (element['paidFor'] == expense.paidFor &&
-                  element['paidBy'] == expense.paidBy))) {
-            var balanceElement = balanceList.firstWhere((element) =>
-                (element['paidFor'] == expense.paidFor &&
-                    element['paidBy'] == expense.paidBy));
+          if (balanceList.any((element) => (element['paidFor'] == expense.paidFor && element['paidBy'] == expense.paidBy))) {
+            var balanceElement = balanceList.firstWhere((element) => (element['paidFor'] == expense.paidFor && element['paidBy'] == expense.paidBy));
             balanceElement['amount'] += expense.amount;
           } else {
             balanceList.add({

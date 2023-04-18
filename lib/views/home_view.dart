@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_cost_app/models/group_model.dart';
 
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:share_cost_app/services/db_operations.dart';
@@ -18,10 +19,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final groupId = ModalRoute.of(context)!.settings.arguments as String;
+    final group = ModalRoute.of(context)!.settings.arguments as Group;
 
     void navigateToExpenseForm(){
-      Navigator.pushNamed(context, Routes.newExpense, arguments: groupId);
+      Navigator.pushNamed(context, Routes.newExpense, arguments: group);
     }
 
     return DefaultTabController(
@@ -34,8 +35,8 @@ class _HomeViewState extends State<HomeView> {
             title: const Text("Share Cost App - Dashboard"),
           ),
           body: TabBarView(children: [
-            ExpensesTab(groupId: groupId),
-            BalanceTab(groupId: groupId)
+            ExpensesTab(group: group),
+            BalanceTab(group: group)
             // ListView(
             //   children: [
             //     //BarChart(data: myData, bars: , xAxis: myData[0][1], yAxis: yAxis),
