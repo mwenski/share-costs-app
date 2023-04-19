@@ -16,7 +16,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    void _navigateToRegister() {
+    void navigateToRegister() {
       Navigator.pushNamed(context, Routes.register);
     }
 
@@ -62,7 +62,7 @@ class _LoginViewState extends State<LoginView> {
                   child: const Text('Login!'),
                 ),
                 TextButton(
-                    onPressed: _navigateToRegister,
+                    onPressed: navigateToRegister,
                     child: const Text('Create an account!'))
               ]),
             ),

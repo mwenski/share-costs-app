@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/routes.dart';
-import 'package:share_cost_app/components/group_list.dart';
+import 'package:share_cost_app/components/group_list/group_list.dart';
+import 'package:share_cost_app/components/side_menu/side_menu.dart';
 
 class GroupListView extends StatefulWidget {
   const GroupListView({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _GroupListViewState extends State<GroupListView> {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Group List View")),
+      drawer: SideMenu(),
       body: GroupList(),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToNewGroupView,

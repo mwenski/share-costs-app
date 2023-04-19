@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:share_cost_app/models/expense_model.dart';
-import 'package:share_cost_app/services/authentication.dart';
-import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/models/group_model.dart';
+import 'package:share_cost_app/services/db_operations.dart';
+import 'package:share_cost_app/services/authentication.dart';
+import 'package:share_cost_app/components/side_menu/side_menu.dart';
 
 class ExpenseForm extends StatefulWidget {
   const ExpenseForm({Key? key}) : super(key: key);
@@ -25,34 +25,21 @@ class _ExpenseFormState extends State<ExpenseForm> {
   Widget build(BuildContext context) {
     final group = ModalRoute.of(context)!.settings.arguments as Group;
 
-    Future<void> getUsers(String id) async {
-      await DbOperations.getUsers(id);
-      print("Test${DbOperations.members}");
-    }
-
     setState(() {
-      getUsers(group.id);
-      // paidByValue = DbOperations.members[0].id;
-      // paidForValue = DbOperations.members[1].id;
       paidByValue = group.members[0].id;
       paidForValue = group.members[1].id;
     });
 
-    CollectionReference expenseCollection =
-        FirebaseFirestore.instance.collection('expenses');
     void addExpense() {
       Expense expense = Expense(
           name: nameController.text,
-          ownerId: Authentication.getCurrentUser() as String,
+          ownerId: Authentication.getCurrentUser()?.uid as String,
           groupId: group.id,
           amount: double.parse(amountController.text),
           paidBy: paidByValue,
           paidFor: paidForValue);
 
-      expenseCollection
-          .add(expense.toJson())
-          .then((value) => print("Expense Added"))
-          .catchError((error) => print("Failed to add expense: $error"));
+      DbOperations.addExpense(expense);
     }
 
     void checkIfCanBeAdded() {
@@ -76,6 +63,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
 
     return Scaffold(
         appBar: AppBar(title: const Text("Add new expense")),
+        drawer: SideMenu(),
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [
@@ -102,13 +90,6 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                // TextField(
-                //   controller: paidByController,
-                //   decoration: const InputDecoration(
-                //     border: OutlineInputBorder(),
-                //     labelText: 'Paid by...',
-                //   ),
-                // ),
                 DropdownButtonFormField(
                   hint: const Text('Paid by...'),
                   value: paidByValue,
@@ -123,14 +104,6 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                //DropdownButton(items: , onChanged: null),
-                // TextField(
-                //   controller: paidForController,
-                //   decoration: const InputDecoration(
-                //     border: OutlineInputBorder(),
-                //     labelText: 'Paid for...',
-                //   ),
-                // ),
                 DropdownButtonFormField(
                   hint: const Text('Paid for...'),
                   value: paidForValue,
@@ -157,6 +130,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
               ]),
             ),
           ],
-        ));
+        )
+    );
   }
 }

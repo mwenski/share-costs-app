@@ -3,16 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:share_cost_app/models/expense_model.dart';
 import 'package:share_cost_app/models/group_model.dart';
-import 'package:share_cost_app/models/user_model.dart';
 import 'package:share_cost_app/services/authentication.dart';
 
 class DbOperations {
-  static List<User> members = [];
-
   static Stream<QuerySnapshot> getGroupsStream() {
     return FirebaseFirestore.instance
         .collection('group')
-        .where('ownerId', isEqualTo: Authentication.getCurrentUser() as String)
+        .where('ownerId', isEqualTo: Authentication.getCurrentUser()?.uid as String)
         .orderBy('date', descending: false)
         .snapshots();
   }
@@ -20,9 +17,23 @@ class DbOperations {
   static Stream<QuerySnapshot> getExpensesStream(String groupId) {
     return FirebaseFirestore.instance
         .collection('expenses')
-        .where('ownerId', isEqualTo: Authentication.getCurrentUser() as String)
+        .where('ownerId', isEqualTo: Authentication.getCurrentUser()?.uid as String)
         .where('groupId', isEqualTo: groupId)
         .snapshots();
+  }
+
+  static void addGroup(Group group){
+    FirebaseFirestore.instance.collection('group')
+        .add(group.toJson())
+        .then((value) => print("Expense Added"))
+        .catchError((error) => print("Failed to add expense: $error"));
+  }
+
+  static void addExpense(Expense expense){
+    FirebaseFirestore.instance.collection('expenses')
+        .add(expense.toJson())
+        .then((value) => print("Expense Added"))
+        .catchError((error) => print("Failed to add expense: $error"));
   }
 
   static List<Expense> getExpenses(AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -35,31 +46,10 @@ class DbOperations {
     return expenses;
   }
 
-  static Future<List<User>> getUsers(String id) async {
-    List<User> users = [];
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('group')
-        .where('ownerId', isEqualTo: Authentication.getCurrentUser() as String)
-        .where('id', isEqualTo: id)
-        .get();
-
-    querySnapshot.docs.forEach((element) {
-      Map<String, dynamic> data = element.data() as Map<String, dynamic>;
-      Group group = Group.fromJson(data);
-      for (User member in group.members) {
-        users.add(member);
-      }
-    });
-
-    members = users;
-
-    return users;
-  }
-
   static Future<void> removeExpense(String id) async {
     FirebaseFirestore.instance
         .collection('expenses')
-        .where('ownerId', isEqualTo: Authentication.getCurrentUser() as String)
+        .where('ownerId', isEqualTo: Authentication.getCurrentUser()?.uid as String)
         .where('id', isEqualTo: id)
         .get()
         .then((snapshot) {
@@ -70,7 +60,7 @@ class DbOperations {
   static Future<void> removeExpenses(String groupId) async {
     FirebaseFirestore.instance
         .collection('expenses')
-        .where('ownerId', isEqualTo: Authentication.getCurrentUser() as String)
+        .where('ownerId', isEqualTo: Authentication.getCurrentUser()?.uid as String)
         .where('groupId', isEqualTo: groupId)
         .get()
         .then((snapshot) {
@@ -83,7 +73,7 @@ class DbOperations {
   static Future<void> removeGroup(String id) async {
     FirebaseFirestore.instance
         .collection('group')
-        .where('ownerId', isEqualTo: Authentication.getCurrentUser() as String)
+        .where('ownerId', isEqualTo: Authentication.getCurrentUser()?.uid as String)
         .where('id', isEqualTo: id)
         .get()
         .then((snapshot) {

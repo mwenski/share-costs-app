@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/models/group_model.dart';
-import 'package:share_cost_app/components/expenses_tab.dart';
-import 'package:share_cost_app/components/balance_tab.dart';
-
+import 'package:share_cost_app/components/expense_tab/expenses_tab.dart';
+import 'package:share_cost_app/components/balance_tab/balance_tab.dart';
+import 'package:share_cost_app/components/side_menu/side_menu.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -30,19 +30,12 @@ class _HomeViewState extends State<HomeView> {
             bottom: const TabBar(
               tabs: [Tab(text: "Expenses"), Tab(text: "Balance")],
             ),
-            title: const Text("Share Cost App - Dashboard"),
+            title: const Text("Dashboard"),
           ),
+          drawer: SideMenu(),
           body: TabBarView(children: [
             ExpensesTab(group: group),
             BalanceTab(group: group)
-            // ListView(
-            //   children: [
-            //     //BarChart(data: myData, bars: , xAxis: myData[0][1], yAxis: yAxis),
-            //     const Text("HOW TO SHARE COSTS",
-            //         style: TextStyle(fontSize: 26, color: Colors.grey)),
-            //     BalanceTab(groupId: groupId),
-            //   ],
-            // ),
           ]),
           floatingActionButton: FloatingActionButton(
             onPressed: navigateToExpenseForm,

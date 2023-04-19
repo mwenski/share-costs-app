@@ -5,8 +5,8 @@ import 'package:share_cost_app/models/expense_model.dart';
 import 'package:share_cost_app/models/balance_model.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/services/db_operations.dart';
-import 'package:share_cost_app/components/balance_list_item.dart';
-import 'package:share_cost_app/components/balance_chart.dart';
+import 'package:share_cost_app/components/balance_tab/balance_list_item.dart';
+import 'package:share_cost_app/components/balance_tab/balance_chart.dart';
 
 class BalanceTab extends StatefulWidget {
   const BalanceTab({Key? key, required this.group}) : super(key: key);

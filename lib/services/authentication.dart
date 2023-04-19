@@ -15,7 +15,7 @@ class Authentication{
       await FirebaseAuth.instance.signOut();
       return null;
     } on FirebaseAuthException catch (ex){
-      return "${ex.code}: ${ex.message}";
+      return "${ex.message}";
     }
   }
 
@@ -39,9 +39,9 @@ class Authentication{
     return logged;
   }
 
-  static String? getCurrentUser(){
+  static User? getCurrentUser(){
     final User? user = FirebaseAuth.instance.currentUser;
-    return user?.uid.toString();
+    return user;
   }
 
 

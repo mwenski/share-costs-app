@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/models/user_model.dart';
 import 'package:share_cost_app/services/authentication.dart';
+import 'package:share_cost_app/services/db_operations.dart';
 
 class GroupForm extends StatefulWidget {
   const GroupForm({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _GroupFormState extends State<GroupForm> {
       FirebaseFirestore.instance.collection('group');
   void addGroup() {
     Group group = Group(
-        ownerId: Authentication.getCurrentUser() as String,
+        ownerId: Authentication.getCurrentUser()?.uid as String,
         name: nameController.text,
         description: descriptionController.text,
         members: memberControllers
@@ -48,11 +49,7 @@ class _GroupFormState extends State<GroupForm> {
 
     print(group.toJson());
 
-    groupCollection
-        .add(group.toJson())
-        .then((value) => print("Expense Added"))
-        .catchError((error) => print("Failed to add expense: $error"));
-
+    DbOperations.addGroup(group);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text("Group created!"),
       backgroundColor: Colors.green,
