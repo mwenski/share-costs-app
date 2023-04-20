@@ -18,6 +18,7 @@ class BalanceTab extends StatefulWidget {
 }
 
 class _BalanceTabState extends State<BalanceTab> {
+
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> balanceStream =
@@ -64,13 +65,6 @@ class _BalanceTabState extends State<BalanceTab> {
 
           changeBalance(expense.paidBy, expense.amount);
           changeBalance(expense.paidFor, -expense.amount);
-
-          // balance[expense.paidBy] = (balance[expense.paidBy] == null)
-          //     ? expense.amount
-          //     : balance[expense.paidBy]! + expense.amount;
-          // balance[expense.paidFor] = (balance[expense.paidFor] == null)
-          //     ? -expense.amount
-          //     : balance[expense.paidFor]! - expense.amount;
         });
 
         for (var i = 0; i < balanceList.length; i++) {
@@ -88,29 +82,22 @@ class _BalanceTabState extends State<BalanceTab> {
           }
         }
 
+
         //Balance calculations end here
         return Column(
           children: [
-            BalanceChart(membersBalance: membersBalance),
+            BalanceChart(membersBalance: membersBalance,
+                         members: widget.group.members),
             Flexible(
               child: ListView(
                   children: balanceList.map((balanceElement) {
                 return BalanceListItem(
-                    paidFor: balanceElement['paidFor'],
-                    paidBy: balanceElement['paidBy'],
-                    amount: balanceElement['amount'].toString());
+                    balanceElement: balanceElement,
+                    members: widget.group.members);
               }).toList()),
             )
           ],
         );
-        // return ListView(
-        //   children: balanceList.map((balanceElement) {
-        //     return BalanceListItem(
-        //         paidFor: balanceElement['paidFor'],
-        //         paidBy: balanceElement['paidBy'],
-        //         amount: balanceElement['amount'].toString());
-        //   }).toList(),
-        // );
       },
     );
   }

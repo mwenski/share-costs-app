@@ -16,6 +16,7 @@ class ExpensesTab extends StatefulWidget {
 }
 
 class _ExpensesTabState extends State<ExpensesTab> {
+
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> expensesStream = DbOperations.getExpensesStream(widget.group.id);
@@ -36,7 +37,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
             Expense expense = Expense.fromJson(data);
-            return ExpensesListItem(expense: expense);
+            return ExpensesListItem(expense: expense, members: widget.group.members);
           }).toList(),
         );
       },

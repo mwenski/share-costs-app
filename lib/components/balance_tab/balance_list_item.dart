@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:text_scroll/text_scroll.dart';
 
+import 'package:share_cost_app/models/user_model.dart';
+
 class BalanceListItem extends StatelessWidget {
   const BalanceListItem(
       {super.key,
-      required this.paidFor,
-      required this.paidBy,
-      required this.amount});
+      required this.balanceElement,
+      required this.members});
 
-  final String paidFor;
-  final String paidBy;
-  final String amount;
+  final Map<String, dynamic> balanceElement;
+  final List<User> members;
 
   @override
   Widget build(BuildContext context) {
+    String getName(String id){
+      User? named = members.firstWhere((element) => element.id == id);
+      return named.name;
+    }
+
     return Container(
       margin: const EdgeInsets.all(2.0),
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -23,7 +28,7 @@ class BalanceListItem extends StatelessWidget {
           Row(
             children: [
               Flexible(
-                child: TextScroll(paidFor,
+                child: TextScroll(getName(balanceElement["paidFor"]),
                 style: const TextStyle(fontSize: 32, color: Colors.blue),
                 intervalSpaces: 10,
                 velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
@@ -38,7 +43,7 @@ class BalanceListItem extends StatelessWidget {
                   style: TextStyle(fontSize: 20, color: Colors.grey)),
               const Spacer(),
               Text(
-                amount,
+                balanceElement["amount"].toString(),
                 style: const TextStyle(fontSize: 32, color: Colors.blue),
               )
             ],
@@ -46,7 +51,7 @@ class BalanceListItem extends StatelessWidget {
           Row(
             children: [
               Flexible(
-                child: TextScroll(paidBy,
+                child: TextScroll(getName(balanceElement["paidBy"]),
                   style: const TextStyle(fontSize: 32, color: Colors.blue),
                   intervalSpaces: 10,
                   velocity: Velocity(pixelsPerSecond: Offset(50, 0)),

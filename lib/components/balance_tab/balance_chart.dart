@@ -2,23 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter_new/flutter.dart' as charts;
 
 import 'package:share_cost_app/models/balance_model.dart';
+import 'package:share_cost_app/models/user_model.dart';
 
 class BalanceChart extends StatelessWidget {
-  const BalanceChart({Key? key, required this.membersBalance})
-      : super(key: key);
+  const BalanceChart({Key? key,
+                      required this.membersBalance,
+                      required this.members})
+                      : super(key: key);
 
   final List<Balance> membersBalance;
+  final List<User> members;
 
   @override
   Widget build(BuildContext context) {
+    String getName(String id){
+      User? named = members.firstWhere((element) => element.id == id);
+      return named.name;
+    }
+
     List<charts.Series<Balance, String>> data = [
       charts.Series(
           id: "Balance Chart",
           data: membersBalance,
-          domainFn: (Balance data, _) => data.name,
+          domainFn: (Balance data, _) => getName(data.name),
           measureFn: (Balance data, _) => data.amount,
           colorFn: (Balance data, _) => data.amount<0 ? charts.ColorUtil.fromDartColor(Colors.red) : charts.ColorUtil.fromDartColor(Colors.green),
-          labelAccessorFn: (Balance data, _) => '${data.name} | ${data.amount}')
+          labelAccessorFn: (Balance data, _) => '${getName(data.name)} | ${data.amount}')
     ];
 
     return Container(
