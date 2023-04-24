@@ -58,18 +58,16 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    if(passwordController.text == confirmPasswordController.text){
-                      var res = await Authentication.userRegistration(emailController.text, passwordController.text);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: res == null ? Colors.green : Colors.red,
+                    var res = await Authentication.userRegistration(
+                        emailController.text,
+                        passwordController.text,
+                        confirmPasswordController.text);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor:
+                            res == null ? Colors.green : Colors.red,
                         content: Text(res ?? "Registered and logged in!")));
-                      if (res == null){
-                        Navigator.pushNamed(context, Routes.group);
-                      }
-                    }else{
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text("Passwords are not equal!")));
+                    if (res == null) {
+                      Navigator.pushNamed(context, Routes.group);
                     }
                   },
                   child: const Text('Create an account!'),
@@ -77,7 +75,6 @@ class _RegisterViewState extends State<RegisterView> {
               ]),
             ),
           ],
-        )
-    );
+        ));
   }
 }
