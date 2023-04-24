@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:share_cost_app/style.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/components/expense_tab/expenses_list_item.dart';
@@ -16,20 +17,28 @@ class ExpensesTab extends StatefulWidget {
 }
 
 class _ExpensesTabState extends State<ExpensesTab> {
-
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> expensesStream = DbOperations.getExpensesStream(widget.group.id);
+    final Stream<QuerySnapshot> expensesStream =
+        DbOperations.getExpensesStream(widget.group.id);
 
     return StreamBuilder<QuerySnapshot>(
       stream: expensesStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return const Text('Something went wrong');
+          return const Center(
+              child: Text(
+            'Something went wrong',
+            style: Style.errorStyle,
+          ));
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading...");
+          return const Center(
+              child: Text(
+            "Loading...",
+            style: Style.loadingStyle,
+          ));
         }
 
         return ListView(
@@ -37,7 +46,8 @@ class _ExpensesTabState extends State<ExpensesTab> {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
             Expense expense = Expense.fromJson(data);
-            return ExpensesListItem(expense: expense, members: widget.group.members);
+            return ExpensesListItem(
+                expense: expense, members: widget.group.members);
           }).toList(),
         );
       },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 import 'package:share_cost_app/routes.dart';
+import 'package:share_cost_app/style.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/models/group_model.dart';
 
@@ -40,7 +41,7 @@ class GroupsListItem extends StatelessWidget {
               children: [
                 Flexible(
                   child: TextScroll(group.name,
-                    style: const TextStyle(fontSize: 32, color: Colors.blue),
+                    style: Style.headerStyle,
                     intervalSpaces: 10,
                     velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
                     pauseBetween: Duration(seconds: 1),
@@ -48,17 +49,29 @@ class GroupsListItem extends StatelessWidget {
                 )
               ],
             ),
-            Text(group.ownerId,
-                style: const TextStyle(fontSize: 20, color: Colors.grey)),
-            // const Spacer(),
-            Text(group.description,
-                style: const TextStyle(fontSize: 20, color: Colors.grey)),
-            Text(group.id,
-                style: const TextStyle(fontSize: 20, color: Colors.grey)),
-            Text(group.date.toString(),
-                style: const TextStyle(fontSize: 20, color: Colors.grey)),
+            Row(
+              children: [
+                Flexible(
+                  child: TextScroll(group.description,
+                    style: Style.subheaderStyle,
+                    intervalSpaces: 10,
+                    velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
+                    pauseBetween: Duration(seconds: 1),
+                  ),
+                )
+              ],
+            ),
             Row(children: [
-              TextButton(onPressed: ()=>{removeGroup()}, child: const Text("Remove group"))
+              IconButton(
+                onPressed: removeGroup,
+                icon: Icon(Icons.delete),
+                tooltip: "Remove group",
+                color: Colors.blue,
+                iconSize: 20,
+              ),
+              const Spacer(),
+              Text(group.date.toString(),
+                  style: Style.dateStyle),
             ],)
           ],
         ),

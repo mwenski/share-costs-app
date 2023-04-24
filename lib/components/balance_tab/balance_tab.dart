@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:share_cost_app/style.dart';
 import 'package:share_cost_app/models/expense_model.dart';
 import 'package:share_cost_app/models/balance_model.dart';
 import 'package:share_cost_app/models/group_model.dart';
@@ -18,7 +19,6 @@ class BalanceTab extends StatefulWidget {
 }
 
 class _BalanceTabState extends State<BalanceTab> {
-
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> balanceStream =
@@ -28,11 +28,19 @@ class _BalanceTabState extends State<BalanceTab> {
       stream: balanceStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return const Text('Something went wrong');
+          return const Center(
+              child: Text(
+            'Something went wrong',
+            style: Style.errorStyle,
+          ));
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading...");
+          return const Center(
+              child: Text(
+            "Loading...",
+            style: Style.loadingStyle,
+          ));
         }
 
         List<Expense> expenses = DbOperations.getExpenses(snapshot);
@@ -44,7 +52,8 @@ class _BalanceTabState extends State<BalanceTab> {
         void changeBalance(String name, double value) {
           bool isItem = membersBalance.any((element) => element.name == name);
           if (isItem) {
-            Balance item = membersBalance.firstWhere((element) => element.name == name);
+            Balance item =
+                membersBalance.firstWhere((element) => element.name == name);
             item.amount += value;
           } else {
             membersBalance.add(Balance(name: name, amount: value));
@@ -52,8 +61,12 @@ class _BalanceTabState extends State<BalanceTab> {
         }
 
         expenses.forEach((expense) {
-          if (balanceList.any((element) => (element['paidFor'] == expense.paidFor && element['paidBy'] == expense.paidBy))) {
-            var balanceElement = balanceList.firstWhere((element) => (element['paidFor'] == expense.paidFor && element['paidBy'] == expense.paidBy));
+          if (balanceList.any((element) =>
+              (element['paidFor'] == expense.paidFor &&
+                  element['paidBy'] == expense.paidBy))) {
+            var balanceElement = balanceList.firstWhere((element) =>
+                (element['paidFor'] == expense.paidFor &&
+                    element['paidBy'] == expense.paidBy));
             balanceElement['amount'] += expense.amount;
           } else {
             balanceList.add({
@@ -74,7 +87,7 @@ class _BalanceTabState extends State<BalanceTab> {
               if (balanceList[i]['amount'] > balanceList[j]['amount']) {
                 balanceList[i]['amount'] -= balanceList[j]['amount'];
                 balanceList.removeAt(j);
-              } else if (balanceList[i]['amount'] > balanceList[j]['amount']) {
+              } else if (balanceList[i]['amount'] < balanceList[j]['amount']) {
                 balanceList[j]['amount'] -= balanceList[i]['amount'];
                 balanceList.removeAt(i);
               }
@@ -82,12 +95,11 @@ class _BalanceTabState extends State<BalanceTab> {
           }
         }
 
-
         //Balance calculations end here
         return Column(
           children: [
-            BalanceChart(membersBalance: membersBalance,
-                         members: widget.group.members),
+            BalanceChart(
+                membersBalance: membersBalance, members: widget.group.members),
             Flexible(
               child: ListView(
                   children: balanceList.map((balanceElement) {
