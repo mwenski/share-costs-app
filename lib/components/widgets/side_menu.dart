@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/services/authentication.dart';
+import 'package:share_cost_app/components/widgets/widgets.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({Key? key}) : super(key: key);
@@ -43,13 +44,15 @@ class SideMenu extends StatelessWidget {
             leading: const Icon(Icons.exit_to_app_outlined),
             title: const Text("Sign out"),
             onTap: () async {
-              var res = await Authentication.signOut();
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      backgroundColor: res == null ? Colors.green : Colors.red,
-                      content: Text(res ?? "Logged out!")));
-              if(res == null){
-                Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+
+              var response = await Widgets.alertDialog(context, "Logging out", "Are you sure you want to log out?");
+              if (response == true) {
+                var result = await Authentication.signOut();
+                Widgets.scaffoldMessenger(context, result, "Logged out!");
+                if (result == null) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      Routes.login, (route) => false);
+                }
               }
             },
           )

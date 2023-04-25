@@ -55,9 +55,9 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    var res = await Authentication.signIn(emailController.text, passwordController.text);
-                    Widgets.scaffoldMessenger(context, res, "Logged in!");
-                    if (res == null){
+                    var response = await Authentication.signIn(emailController.text, passwordController.text);
+                    Widgets.scaffoldMessenger(context, response, "Logged in!");
+                    if (response == null){
                       Navigator.pushNamed(context, Routes.group);
                     }
                   },

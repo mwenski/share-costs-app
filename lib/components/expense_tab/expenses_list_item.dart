@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:share_cost_app/style.dart';
 import 'package:share_cost_app/models/expense_model.dart';
@@ -39,7 +40,7 @@ class ExpensesListItem extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                expense.amount.toString(),
+                expense.amount.toStringAsFixed(2).replaceAll(".", ","),
                 style: Style.headerStyle,
               )
             ],
@@ -54,19 +55,19 @@ class ExpensesListItem extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                  onPressed:
-                  removeExpense,
-                  // () => Widgets.showAlertDialog(
-                  //     context,
-                  //     "Expense Removing",
-                  //     "Are you sure you want to remove this expense?",
-                  //     () => removeExpense),
+                  onPressed: () async {
+                    var response = await Widgets.alertDialog(
+                        context, "Expense removing", "Are you sure you want to remove this expense?");
+                    if (response == true) {
+                      removeExpense();
+                    }
+                  },
                   icon: Icon(Icons.delete),
                   tooltip: "Remove expense",
                   color: Colors.blue,
                   iconSize: 20),
               const Spacer(),
-              Text(expense.date.toString(), style: Style.dateStyle)
+              Text(DateFormat("HH:mm  dd/MM/yyyy").format(expense.date), style: Style.dateStyle)
             ],
           )
         ],

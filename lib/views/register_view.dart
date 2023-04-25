@@ -59,12 +59,12 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    var res = await Authentication.userRegistration(
+                    var response = await Authentication.userRegistration(
                         emailController.text,
                         passwordController.text,
                         confirmPasswordController.text);
-                    Widgets.scaffoldMessenger(context, res, "Registered and logged in!");
-                    if (res == null) {
+                    Widgets.scaffoldMessenger(context, response, "Registered and logged in!");
+                    if (response == null) {
                       Navigator.pushNamed(context, Routes.group);
                     }
                   },

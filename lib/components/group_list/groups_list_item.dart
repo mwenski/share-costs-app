@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:text_scroll/text_scroll.dart';
+import 'package:intl/intl.dart';
 
 import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/style.dart';
@@ -24,11 +25,6 @@ class GroupsListItem extends StatelessWidget {
     void removeGroup() async {
       var res = await DbOperations.removeGroup(group.id);
       Widgets.scaffoldMessenger(context, res, "Group deleted!");
-
-      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      //   content: Text("Group deleted!"),
-      //   backgroundColor: Colors.green,
-      // ));
     }
 
     return GestureDetector(
@@ -65,14 +61,20 @@ class GroupsListItem extends StatelessWidget {
             ),
             Row(children: [
               IconButton(
-                onPressed: removeGroup,
+                onPressed: () async {
+                  var response = await Widgets.alertDialog(
+                      context, "Group removing", "Are you sure you want to remove this group?");
+                  if (response == true) {
+                    removeGroup();
+                  }
+                },
                 icon: Icon(Icons.delete),
                 tooltip: "Remove group",
                 color: Colors.blue,
                 iconSize: 20,
               ),
               const Spacer(),
-              Text(group.date.toString(),
+              Text(DateFormat("HH:mm  dd/MM/yyyy").format(group.date),
                   style: Style.dateStyle),
             ],)
           ],

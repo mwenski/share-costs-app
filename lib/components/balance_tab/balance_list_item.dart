@@ -40,7 +40,7 @@ class BalanceListItem extends StatelessWidget {
                   style: Style.subheaderStyle),
               SizedBox(width: MediaQuery.of(context).size.width/2,),
               Text(
-                balanceElement["amount"].toString(),
+                balanceElement["amount"].toStringAsFixed(2).replaceAll(".",","),
                 style: Style.headerStyle,
               )
             ],

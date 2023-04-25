@@ -50,8 +50,8 @@ class _GroupFormState extends State<GroupForm> {
 
     print(group.toJson());
 
-    var res = DbOperations.addGroup(group);
-    Widgets.scaffoldMessenger(context, res, "Group created!");
+    var response = DbOperations.addGroup(group);
+    Widgets.scaffoldMessenger(context, response, "Group created!");
   }
 
   @override
