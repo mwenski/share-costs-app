@@ -4,7 +4,7 @@ import 'package:share_cost_app/models/expense_model.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/services/authentication.dart';
-import 'package:share_cost_app/components/side_menu/side_menu.dart';
+import 'package:share_cost_app/components/widgets/side_menu.dart';
 
 class ExpenseForm extends StatefulWidget {
   const ExpenseForm({Key? key}) : super(key: key);

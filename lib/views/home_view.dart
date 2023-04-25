@@ -4,7 +4,7 @@ import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/components/expense_tab/expenses_tab.dart';
 import 'package:share_cost_app/components/balance_tab/balance_tab.dart';
-import 'package:share_cost_app/components/side_menu/side_menu.dart';
+import 'package:share_cost_app/components/widgets/side_menu.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);

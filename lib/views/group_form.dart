@@ -5,6 +5,7 @@ import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/models/user_model.dart';
 import 'package:share_cost_app/services/authentication.dart';
 import 'package:share_cost_app/services/db_operations.dart';
+import 'package:share_cost_app/components/widgets/widgets.dart';
 
 class GroupForm extends StatefulWidget {
   const GroupForm({Key? key}) : super(key: key);
@@ -49,11 +50,8 @@ class _GroupFormState extends State<GroupForm> {
 
     print(group.toJson());
 
-    DbOperations.addGroup(group);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("Group created!"),
-      backgroundColor: Colors.green,
-    ));
+    var res = DbOperations.addGroup(group);
+    Widgets.scaffoldMessenger(context, res, "Group created!");
   }
 
   @override

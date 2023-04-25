@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/services/authentication.dart';
+import 'package:share_cost_app/components/widgets/widgets.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -19,6 +20,10 @@ class _LoginViewState extends State<LoginView> {
     void navigateToRegister() {
       Navigator.pushNamed(context, Routes.register);
     }
+
+    // if(Authentication.getCurrentUser() != null){
+    //   Navigator.pushNamed(context, Routes.group);
+    // }
 
     return Scaffold(
         appBar: AppBar(title: const Text("Share Cost App - Login")),
@@ -51,10 +56,7 @@ class _LoginViewState extends State<LoginView> {
                 ElevatedButton(
                   onPressed: () async {
                     var res = await Authentication.signIn(emailController.text, passwordController.text);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            backgroundColor: res == null ? Colors.green : Colors.red,
-                            content: Text(res ?? "Logged in!")));
+                    Widgets.scaffoldMessenger(context, res, "Logged in!");
                     if (res == null){
                       Navigator.pushNamed(context, Routes.group);
                     }

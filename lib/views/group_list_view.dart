@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/components/group_list/group_list.dart';
-import 'package:share_cost_app/components/side_menu/side_menu.dart';
+import 'package:share_cost_app/components/widgets/side_menu.dart';
 
 class GroupListView extends StatefulWidget {
   const GroupListView({Key? key}) : super(key: key);

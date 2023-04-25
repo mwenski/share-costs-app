@@ -5,6 +5,7 @@ import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/style.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/models/group_model.dart';
+import 'package:share_cost_app/components/widgets/widgets.dart';
 
 class GroupsListItem extends StatelessWidget {
   const GroupsListItem(
@@ -20,13 +21,14 @@ class GroupsListItem extends StatelessWidget {
       Navigator.pushNamed(context, Routes.home, arguments: group);
     }
 
-    void removeGroup(){
-      DbOperations.removeGroup(group.id);
+    void removeGroup() async {
+      var res = await DbOperations.removeGroup(group.id);
+      Widgets.scaffoldMessenger(context, res, "Group deleted!");
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Group deleted!"),
-        backgroundColor: Colors.green,
-      ));
+      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //   content: Text("Group deleted!"),
+      //   backgroundColor: Colors.green,
+      // ));
     }
 
     return GestureDetector(

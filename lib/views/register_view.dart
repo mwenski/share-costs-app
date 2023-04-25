@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:share_cost_app/services/authentication.dart';
 import 'package:share_cost_app/routes.dart';
+import 'package:share_cost_app/services/authentication.dart';
+import 'package:share_cost_app/components/widgets/widgets.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -62,10 +63,7 @@ class _RegisterViewState extends State<RegisterView> {
                         emailController.text,
                         passwordController.text,
                         confirmPasswordController.text);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor:
-                            res == null ? Colors.green : Colors.red,
-                        content: Text(res ?? "Registered and logged in!")));
+                    Widgets.scaffoldMessenger(context, res, "Registered and logged in!");
                     if (res == null) {
                       Navigator.pushNamed(context, Routes.group);
                     }

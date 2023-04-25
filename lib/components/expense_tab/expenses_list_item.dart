@@ -4,6 +4,7 @@ import 'package:share_cost_app/style.dart';
 import 'package:share_cost_app/models/expense_model.dart';
 import 'package:share_cost_app/models/user_model.dart';
 import 'package:share_cost_app/services/db_operations.dart';
+import 'package:share_cost_app/components/widgets/widgets.dart';
 
 class ExpensesListItem extends StatelessWidget {
   const ExpensesListItem(
@@ -14,12 +15,9 @@ class ExpensesListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void removeExpense() {
-      DbOperations.removeExpense(expense.id);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Expense deleted!"),
-        backgroundColor: Colors.green,
-      ));
+    void removeExpense() async {
+      var res = await DbOperations.removeExpense(expense.id);
+      Widgets.scaffoldMessenger(context, res, "Expense deleted!");
     }
 
     User? paidBy =
@@ -56,12 +54,17 @@ class ExpensesListItem extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                onPressed: removeExpense,
-                icon: Icon(Icons.delete),
-                tooltip: "Remove expense",
-                color: Colors.blue,
-                iconSize: 20
-              ),
+                  onPressed:
+                  removeExpense,
+                  // () => Widgets.showAlertDialog(
+                  //     context,
+                  //     "Expense Removing",
+                  //     "Are you sure you want to remove this expense?",
+                  //     () => removeExpense),
+                  icon: Icon(Icons.delete),
+                  tooltip: "Remove expense",
+                  color: Colors.blue,
+                  iconSize: 20),
               const Spacer(),
               Text(expense.date.toString(), style: Style.dateStyle)
             ],
