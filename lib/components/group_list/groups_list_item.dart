@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/style.dart';
+import 'package:share_cost_app/constant.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/components/widgets/widgets.dart';
@@ -70,6 +71,16 @@ class GroupsListItem extends StatelessWidget {
                 },
                 icon: Icon(Icons.delete),
                 tooltip: "Remove group",
+                color: Colors.blue,
+                iconSize: 20,
+              ),
+              IconButton(
+                onPressed: () {
+                  null;
+                  //Navigator.pushNamed(context, Routes.newGroup, arguments: {"group": group, "formType": FormType.update});
+                },
+                icon: Icon(Icons.edit),
+                tooltip: "Update group",
                 color: Colors.blue,
                 iconSize: 20,
               ),

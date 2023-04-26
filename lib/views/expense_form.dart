@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:share_cost_app/constant.dart';
 import 'package:share_cost_app/models/expense_model.dart';
+import 'package:share_cost_app/models/user_model.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/services/authentication.dart';
 import 'package:share_cost_app/components/widgets/side_menu.dart';
+import 'package:share_cost_app/components/widgets/widgets.dart';
 
 class ExpenseForm extends StatefulWidget {
   const ExpenseForm({Key? key}) : super(key: key);
@@ -14,55 +17,87 @@ class ExpenseForm extends StatefulWidget {
 }
 
 class _ExpenseFormState extends State<ExpenseForm> {
-  final nameController = TextEditingController();
-  final amountController = TextEditingController();
-  final paidByController = TextEditingController();
-  final paidForController = TextEditingController();
+  var nameController = TextEditingController();
+  var amountController = TextEditingController();
+  var paidByController = TextEditingController();
+  var paidForController = TextEditingController();
   String paidByValue = "";
   String paidForValue = "";
 
   @override
   Widget build(BuildContext context) {
-    final group = ModalRoute.of(context)!.settings.arguments as Group;
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final FormType formType = arguments["formType"];
+
+    Group? group;
+    Expense? expense;
+    List<User> members;
+
+    if(formType == FormType.update){
+      expense = arguments["expense"];
+      members = arguments["members"];
+      nameController = TextEditingController(text: expense?.name);
+      amountController = TextEditingController(text: expense?.amount.toStringAsPrecision(2));
+      paidByValue = members.firstWhere((element) => element.id == expense?.paidBy).id;
+      paidForValue = members.firstWhere((element) => element.id == expense?.paidFor).id;
+    }else{
+      group = arguments["group"];
+      members = group!.members;
+      paidByValue = members[0].id;
+      paidForValue = members[1].id;
+    }
 
     setState(() {
-      paidByValue = group.members[0].id;
-      paidForValue = group.members[1].id;
+
     });
 
     void addExpense() {
-      Expense expense = Expense(
+      Expense newExpense = Expense(
           name: nameController.text,
           ownerId: Authentication.getCurrentUser()?.uid as String,
-          groupId: group.id,
+          groupId: group!.id,
           amount: double.parse(amountController.text),
           paidBy: paidByValue,
           paidFor: paidForValue);
 
-      DbOperations.addExpense(expense);
+      DbOperations.addExpense(newExpense);
     }
 
     void checkIfCanBeAdded() {
-      final scaffold = ScaffoldMessenger.of(context);
       if (paidByValue != paidForValue) {
         addExpense();
         Navigator.pop(context);
-        scaffold.showSnackBar(const SnackBar(
-          content: Text("Expense added!"),
-          backgroundColor: Colors.green,
-        ));
+        Widgets.scaffoldMessenger(context, null, "Expense added!");
       } else {
-        scaffold.showSnackBar(SnackBar(
-          content: const Text("'Paid by...' cannot be equal to 'Paid for...'!"),
-          backgroundColor: Colors.red,
-          action: SnackBarAction(
-              label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
-        ));
+        Widgets.scaffoldMessenger(context, "'Paid by...' cannot be equal to 'Paid for...'!", "");
+      }
+    }
+
+    void updateExpense() async {
+      Expense updatedExpense = Expense(
+          id: expense?.id,
+          name: nameController.text,
+          ownerId: Authentication.getCurrentUser()?.uid as String,
+          groupId: expense?.groupId as String,
+          amount: double.parse(amountController.text),
+          paidBy: paidByValue,
+          paidFor: paidForValue);
+
+      await DbOperations.updateExpense(updatedExpense);
+    }
+
+    void checkIfCanBeUpdated() {
+      if (paidByValue != paidForValue) {
+        updateExpense();
+        Navigator.pop(context);
+        Widgets.scaffoldMessenger(context, null, "Expense updated!");
+      } else {
+        Widgets.scaffoldMessenger(context, "'Paid by...' cannot be equal to 'Paid for...'!", "");
       }
     }
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Add new expense")),
+        appBar: AppBar(title: Text(formType == FormType.update ? "Update expense" : "Add new expense")),
         drawer: SideMenu(),
         body: ListView(
           padding: const EdgeInsets.all(20),
@@ -93,7 +128,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 DropdownButtonFormField(
                   hint: const Text('Paid by...'),
                   value: paidByValue,
-                  items: group.members.map((member) {
+                  items: members.map((member) {
                           return DropdownMenuItem<String>(
                             value: member.id,
                             child: Text(member.name),
@@ -107,7 +142,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 DropdownButtonFormField(
                   hint: const Text('Paid for...'),
                   value: paidForValue,
-                  items: group.members.map((member) {
+                  items: members.map((member) {
                           return DropdownMenuItem<String>(
                             value: member.id,
                             child: Text(member.name),
@@ -122,9 +157,11 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   width: double.infinity,
                   height: 60,
                   child: ElevatedButton(
-                    onPressed: () {checkIfCanBeAdded();},
-                    child: const Text('Add expense',
-                        style: TextStyle(fontSize: 18)),
+                    onPressed: () {
+                      formType == FormType.update ? {checkIfCanBeUpdated()} : {checkIfCanBeAdded()};
+                      },
+                    child: Text(formType == FormType.update ? "Update expense" : "Add expense",
+                        style: const TextStyle(fontSize: 18)),
                   ),
                 ),
               ]),

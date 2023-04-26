@@ -54,7 +54,7 @@ class DbOperations {
   }
 
   static Future<String?> removeExpense(String id) async {
-    var result;
+    String? result;
     FirebaseFirestore.instance
         .collection('expenses')
         .where('ownerId',
@@ -69,8 +69,8 @@ class DbOperations {
     return result;
   }
 
-  static Future<void> removeExpenses(String groupId) async {
-    var result;
+  static Future<String?> removeExpenses(String groupId) async {
+    String? result;
     FirebaseFirestore.instance
         .collection('expenses')
         .where('ownerId',
@@ -97,7 +97,41 @@ class DbOperations {
         .get()
         .then((snapshot) {
       result = removeExpenses(id);
-      snapshot.docs.first.reference.delete().catchError((error) => result = "Group cannot be removed: $error");
+      snapshot.docs.first.reference
+          .delete()
+          .catchError((error) => result = "Group cannot be removed: $error");
+    });
+    return result;
+  }
+
+  static Future<String?> updateGroup(Group group) async {
+    String? result;
+    FirebaseFirestore.instance
+        .collection('group')
+        .where('ownerId',
+            isEqualTo: Authentication.getCurrentUser()?.uid as String)
+        .where('id', isEqualTo: group.id)
+        .get()
+        .then((snapshot) {
+      snapshot.docs.first.reference
+          .update(group.toJson())
+          .catchError((error) => result = "Group cannot be updated: $error");
+    });
+    return result;
+  }
+
+  static Future<String?> updateExpense(Expense expense) async {
+    String? result;
+    FirebaseFirestore.instance
+        .collection('expenses')
+        .where('ownerId',
+        isEqualTo: Authentication.getCurrentUser()?.uid as String)
+        .where('id', isEqualTo: expense.id)
+        .get()
+        .then((snapshot) {
+      snapshot.docs.first.reference
+          .update(expense.toJson())
+          .catchError((error) => result = "Expense cannot be updated: $error");
     });
     return result;
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:share_cost_app/routes.dart';
 import 'package:share_cost_app/style.dart';
+import 'package:share_cost_app/constant.dart';
 import 'package:share_cost_app/models/expense_model.dart';
 import 'package:share_cost_app/models/user_model.dart';
 import 'package:share_cost_app/services/db_operations.dart';
@@ -57,7 +59,9 @@ class ExpensesListItem extends StatelessWidget {
               IconButton(
                   onPressed: () async {
                     var response = await Widgets.alertDialog(
-                        context, "Expense removing", "Are you sure you want to remove this expense?");
+                        context,
+                        "Expense removing",
+                        "Are you sure you want to remove this expense?");
                     if (response == true) {
                       removeExpense();
                     }
@@ -66,8 +70,21 @@ class ExpensesListItem extends StatelessWidget {
                   tooltip: "Remove expense",
                   color: Colors.blue,
                   iconSize: 20),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, Routes.newExpense, arguments: {
+                      "expense": expense,
+                      "members": members,
+                      "formType": FormType.update
+                    });
+                  },
+                  icon: Icon(Icons.edit),
+                  tooltip: "Update expense",
+                  color: Colors.blue,
+                  iconSize: 20),
               const Spacer(),
-              Text(DateFormat("HH:mm  dd/MM/yyyy").format(expense.date), style: Style.dateStyle)
+              Text(DateFormat("HH:mm  dd/MM/yyyy").format(expense.date),
+                  style: Style.dateStyle)
             ],
           )
         ],

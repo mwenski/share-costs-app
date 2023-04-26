@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/routes.dart';
+import 'package:share_cost_app/constant.dart';
 import 'package:share_cost_app/components/group_list/group_list.dart';
 import 'package:share_cost_app/components/widgets/side_menu.dart';
 
@@ -20,7 +21,7 @@ class _GroupListViewState extends State<GroupListView> {
   @override
   Widget build(BuildContext context) {
     void _navigateToNewGroupView() {
-      Navigator.pushNamed(context, Routes.newGroup);
+      Navigator.pushNamed(context, Routes.newGroup, arguments: {"formType": FormType.add});
     }
 
     return Scaffold(
