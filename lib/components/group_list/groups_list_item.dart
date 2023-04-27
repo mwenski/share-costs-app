@@ -76,8 +76,8 @@ class GroupsListItem extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  null;
-                  //Navigator.pushNamed(context, Routes.newGroup, arguments: {"group": group, "formType": FormType.update});
+                  //null;
+                  Navigator.pushNamed(context, Routes.newGroup, arguments: {"group": group, "formType": FormType.update});
                 },
                 icon: Icon(Icons.edit),
                 tooltip: "Update group",

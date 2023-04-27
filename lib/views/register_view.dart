@@ -30,6 +30,7 @@ class _RegisterViewState extends State<RegisterView> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'E-mail address',
+                    hintText: 'Enter your email',
                   ),
                 ),
                 const SizedBox(
@@ -41,6 +42,7 @@ class _RegisterViewState extends State<RegisterView> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password',
+                    hintText: 'Enter your password',
                   ),
                 ),
                 const SizedBox(
@@ -52,6 +54,7 @@ class _RegisterViewState extends State<RegisterView> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Confirm password',
+                    hintText: 'Confirm your password',
                   ),
                 ),
                 const SizedBox(

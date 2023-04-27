@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/constant.dart';
+import 'package:share_cost_app/style.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/models/user_model.dart';
 import 'package:share_cost_app/services/authentication.dart';
@@ -15,10 +16,9 @@ class GroupForm extends StatefulWidget {
 }
 
 class _GroupFormState extends State<GroupForm> {
-  List<TextEditingController> memberControllers = <TextEditingController>[
-    TextEditingController(),
-    TextEditingController()
-  ];
+  List<TextEditingController> memberControllers = <TextEditingController>[];
+
+  bool flag = true;
 
   var nameController = TextEditingController();
   var descriptionController = TextEditingController();
@@ -82,13 +82,14 @@ class _GroupFormState extends State<GroupForm> {
 
   @override
   Widget build(BuildContext context) {
+
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final FormType formType = arguments["formType"];
 
     Group group;
 
-    if (formType == FormType.update) {
+    if (formType == FormType.update && flag) {
       group = arguments["group"];
       groupId = group.id;
       nameController = TextEditingController(text: group.name);
@@ -96,7 +97,14 @@ class _GroupFormState extends State<GroupForm> {
       group.members.forEach((element) {
         memberControllers.add(TextEditingController(text: element.name));
       });
+    }else if(flag){
+      memberControllers = <TextEditingController>[
+        TextEditingController(),
+        TextEditingController()
+      ];
     }
+
+    flag = false;
 
     return Scaffold(
         appBar: AppBar(title: Text(formType==FormType.update? "Update group" : "Add new group")),
@@ -130,27 +138,41 @@ class _GroupFormState extends State<GroupForm> {
                   height: 10,
                 ),
                 Row(
-                  children: const [
+                  children: [
                     Text(
-                      "ADD MEMBERS TO YOUR GROUP:",
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold),
+                      formType == FormType.update? "Update members:" : "Add members:",
+                      style: Style.subheaderStyle,
                     ),
-                    Spacer(),
+                    const Spacer(),
                   ],
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 Wrap(
                   spacing: 10.0,
                   runSpacing: 10.0,
                   children: memberControllers
-                      .map((memberController) => TextFormField(
-                        controller: memberController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Member Name',
-                        ),
+                      .map((memberController) => Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: memberController,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Member Name',
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                _removeMemberFromList(memberController);
+                              },
+                              icon: Icon(Icons.close),
+                              tooltip: "Remove member",
+                              color: Colors.red,
+                              iconSize: 20),
+                        ],
                       ))
                       .toList(),
                 ),
@@ -180,7 +202,7 @@ class _GroupFormState extends State<GroupForm> {
                       Navigator.pop(context);
                     },
                     child: Text(formType==FormType.update? "Update group" : "Create new group",
-                        style: TextStyle(fontSize: 18)),
+                        style: const TextStyle(fontSize: 18)),
                   ),
                 ),
               ]),

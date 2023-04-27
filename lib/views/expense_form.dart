@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:share_cost_app/constant.dart';
+import 'package:share_cost_app/style.dart';
 import 'package:share_cost_app/models/expense_model.dart';
 import 'package:share_cost_app/models/user_model.dart';
 import 'package:share_cost_app/models/group_model.dart';
@@ -47,10 +48,6 @@ class _ExpenseFormState extends State<ExpenseForm> {
       paidForValue = members[1].id;
     }
 
-    setState(() {
-
-    });
-
     void addExpense() {
       Expense newExpense = Expense(
           name: nameController.text,
@@ -61,16 +58,6 @@ class _ExpenseFormState extends State<ExpenseForm> {
           paidFor: paidForValue);
 
       DbOperations.addExpense(newExpense);
-    }
-
-    void checkIfCanBeAdded() {
-      if (paidByValue != paidForValue) {
-        addExpense();
-        Navigator.pop(context);
-        Widgets.scaffoldMessenger(context, null, "Expense added!");
-      } else {
-        Widgets.scaffoldMessenger(context, "'Paid by...' cannot be equal to 'Paid for...'!", "");
-      }
     }
 
     void updateExpense() async {
@@ -86,13 +73,21 @@ class _ExpenseFormState extends State<ExpenseForm> {
       await DbOperations.updateExpense(updatedExpense);
     }
 
-    void checkIfCanBeUpdated() {
-      if (paidByValue != paidForValue) {
+    void performOperation() {
+      if (paidByValue == paidForValue) {
+        Widgets.scaffoldMessenger(
+            context, "'Paid by...' cannot be equal to 'Paid for...'!", "");
+        return;
+      }
+
+      if (formType == FormType.update){
         updateExpense();
         Navigator.pop(context);
         Widgets.scaffoldMessenger(context, null, "Expense updated!");
-      } else {
-        Widgets.scaffoldMessenger(context, "'Paid by...' cannot be equal to 'Paid for...'!", "");
+      }else{
+        addExpense();
+        Navigator.pop(context);
+        Widgets.scaffoldMessenger(context, null, "Expense added!");
       }
     }
 
@@ -125,30 +120,44 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                DropdownButtonFormField(
-                  hint: const Text('Paid by...'),
-                  value: paidByValue,
-                  items: members.map((member) {
-                          return DropdownMenuItem<String>(
-                            value: member.id,
-                            child: Text(member.name),
-                          );
-                        }).toList(),
-                  onChanged: (value) => paidByValue = value as String,
+                Row(
+                  children: <Widget>[
+                    const Text("Paid by:  ", style: Style.labelStyle,),
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        hint: const Text('Paid by...'),
+                        value: paidByValue,
+                        items: members.map((member) {
+                                return DropdownMenuItem<String>(
+                                  value: member.id,
+                                  child: Text(member.name),
+                                );
+                              }).toList(),
+                        onChanged: (value) => paidByValue = value as String,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                DropdownButtonFormField(
-                  hint: const Text('Paid for...'),
-                  value: paidForValue,
-                  items: members.map((member) {
-                          return DropdownMenuItem<String>(
-                            value: member.id,
-                            child: Text(member.name),
-                          );
-                        }).toList(),
-                  onChanged: (value) => paidForValue = value as String,
+                Row(
+                  children: [
+                    const Text("Paid for: ", style: Style.labelStyle,),
+                    Expanded(
+                      child: DropdownButtonFormField(
+                        hint: const Text('Paid for...'),
+                        value: paidForValue,
+                        items: members.map((member) {
+                                return DropdownMenuItem<String>(
+                                  value: member.id,
+                                  child: Text(member.name),
+                                );
+                              }).toList(),
+                        onChanged: (value) => paidForValue = value as String,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
@@ -158,7 +167,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   height: 60,
                   child: ElevatedButton(
                     onPressed: () {
-                      formType == FormType.update ? {checkIfCanBeUpdated()} : {checkIfCanBeAdded()};
+                      performOperation();
                       },
                     child: Text(formType == FormType.update ? "Update expense" : "Add expense",
                         style: const TextStyle(fontSize: 18)),

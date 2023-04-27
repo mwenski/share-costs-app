@@ -37,6 +37,8 @@ class _LoginViewState extends State<LoginView> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'E-mail address',
+                    hintText: 'Enter your email',
+                    prefixIcon: Icon(Icons.people),
                   ),
                 ),
                 const SizedBox(
@@ -48,6 +50,8 @@ class _LoginViewState extends State<LoginView> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password',
+                    hintText: 'Enter your password',
+                    prefixIcon: Icon(Icons.lock),
                   ),
                 ),
                 const SizedBox(

@@ -17,6 +17,14 @@ abstract class Style{
     fontWeight: FontWeight.w400
   );
 
+  static const TextStyle labelStyle = TextStyle(
+      fontFamily: 'Helvetica',
+      fontSize: 16,
+      color: Colors.blue,
+      height: 1.2,
+      fontWeight: FontWeight.w400
+  );
+
   static const TextStyle dateStyle = TextStyle(
     fontFamily: 'Helvetica',
     fontSize: 14,
