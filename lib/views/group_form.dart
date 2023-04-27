@@ -171,7 +171,7 @@ class _GroupFormState extends State<GroupForm> {
                               icon: Icon(Icons.close),
                               tooltip: "Remove member",
                               color: Colors.red,
-                              iconSize: 20),
+                              iconSize: 30),
                         ],
                       ))
                       .toList(),

@@ -4,19 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_cost_app/style.dart';
 import 'package:share_cost_app/models/group_model.dart';
 import 'package:share_cost_app/services/db_operations.dart';
-import 'package:share_cost_app/components/expense_tab/expenses_list_item.dart';
+import 'package:share_cost_app/components/expense_tab/expense_list_item.dart';
 import 'package:share_cost_app/models/expense_model.dart';
 
-class ExpensesTab extends StatefulWidget {
-  const ExpensesTab({Key? key, required this.group}) : super(key: key);
+class ExpenseTab extends StatefulWidget {
+  const ExpenseTab({Key? key, required this.group}) : super(key: key);
 
   final Group group;
 
   @override
-  State<ExpensesTab> createState() => _ExpensesTabState();
+  State<ExpenseTab> createState() => _ExpenseTabState();
 }
 
-class _ExpensesTabState extends State<ExpensesTab> {
+class _ExpenseTabState extends State<ExpenseTab> {
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> expensesStream =
@@ -46,7 +46,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
             Expense expense = Expense.fromJson(data);
-            return ExpensesListItem(
+            return ExpenseListItem(
                 expense: expense, members: widget.group.members);
           }).toList(),
         );

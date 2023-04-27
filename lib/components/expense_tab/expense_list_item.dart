@@ -9,8 +9,8 @@ import 'package:share_cost_app/models/user_model.dart';
 import 'package:share_cost_app/services/db_operations.dart';
 import 'package:share_cost_app/components/widgets/widgets.dart';
 
-class ExpensesListItem extends StatelessWidget {
-  const ExpensesListItem(
+class ExpenseListItem extends StatelessWidget {
+  const ExpenseListItem(
       {super.key, required this.expense, required this.members});
 
   final Expense expense;
@@ -24,9 +24,9 @@ class ExpensesListItem extends StatelessWidget {
     }
 
     User? paidBy =
-        members.firstWhere((element) => element.id == expense.paidBy);
+        members.firstWhere((element) => element.id == expense.paidBy, orElse: () => User(name: "N.N."));
     User? paidFor =
-        members.firstWhere((element) => element.id == expense.paidFor);
+        members.firstWhere((element) => element.id == expense.paidFor, orElse: () => User(name: "N.N."));
 
     return Container(
       margin: const EdgeInsets.all(2.0),
@@ -72,7 +72,7 @@ class ExpensesListItem extends StatelessWidget {
                   iconSize: 20),
               IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, Routes.newExpense, arguments: {
+                    Navigator.pushNamed(context, Routes.expenseForm, arguments: {
                       "expense": expense,
                       "members": members,
                       "formType": FormType.update

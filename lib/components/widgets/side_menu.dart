@@ -15,7 +15,7 @@ class SideMenu extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName: null,
-            accountEmail: Text(Authentication.getCurrentUser()?.email as String),
+            accountEmail: Text(Authentication.getCurrentUser()?.email as String ?? ""),
             decoration: const BoxDecoration(color: Colors.blue),
           ),
           ListTile(
@@ -29,7 +29,7 @@ class SideMenu extends StatelessWidget {
             leading: const Icon(Icons.add_box_outlined),
             title: const Text("Add new group"),
             onTap: () => {
-            Navigator.pushNamed(context, Routes.newGroup)
+            Navigator.pushNamed(context, Routes.groupForm)
             },
           ),
           const AboutListTile(

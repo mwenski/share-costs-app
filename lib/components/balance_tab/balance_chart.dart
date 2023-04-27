@@ -16,8 +16,8 @@ class BalanceChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String getName(String id){
-      User? named = members.firstWhere((element) => element.id == id);
-      return named.name;
+      String name = members.firstWhere((element) => element.id == id, orElse: () => User(name: "N.N.")).name;
+      return name;
     }
 
     List<charts.Series<Balance, String>> data = [

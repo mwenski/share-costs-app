@@ -21,7 +21,7 @@ class _GroupListViewState extends State<GroupListView> {
   @override
   Widget build(BuildContext context) {
     void _navigateToNewGroupView() {
-      Navigator.pushNamed(context, Routes.newGroup, arguments: {"formType": FormType.add});
+      Navigator.pushNamed(context, Routes.groupForm, arguments: {"formType": FormType.add});
     }
 
     return Scaffold(

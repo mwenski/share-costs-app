@@ -20,7 +20,7 @@ class GroupsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
 
     void _navigateToGroupView(){
-      Navigator.pushNamed(context, Routes.home, arguments: group);
+      Navigator.pushNamed(context, Routes.dashboard, arguments: group);
     }
 
     void removeGroup() async {
@@ -77,7 +77,7 @@ class GroupsListItem extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   //null;
-                  Navigator.pushNamed(context, Routes.newGroup, arguments: {"group": group, "formType": FormType.update});
+                  Navigator.pushNamed(context, Routes.groupForm, arguments: {"group": group, "formType": FormType.update});
                 },
                 icon: Icon(Icons.edit),
                 tooltip: "Update group",

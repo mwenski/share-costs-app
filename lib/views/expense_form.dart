@@ -39,8 +39,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
       members = arguments["members"];
       nameController = TextEditingController(text: expense?.name);
       amountController = TextEditingController(text: expense?.amount.toStringAsPrecision(2));
-      paidByValue = members.firstWhere((element) => element.id == expense?.paidBy).id;
-      paidForValue = members.firstWhere((element) => element.id == expense?.paidFor).id;
+      paidByValue = members.firstWhere((element) => element.id == expense?.paidBy, orElse: () => members[0]).id;
+      paidForValue = members.firstWhere((element) => element.id == expense?.paidFor, orElse: () => members[1]).id;
     }else{
       group = arguments["group"];
       members = group!.members;

@@ -16,7 +16,7 @@ class BalanceListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String getName(String id){
-      User? named = members.firstWhere((element) => element.id == id);
+      User? named = members.firstWhere((element) => element.id == id, orElse: () => User(name: "N.N."));
       return named.name;
     }
 
@@ -29,6 +29,7 @@ class BalanceListItem extends StatelessWidget {
           Row(
             children: [
               Flexible(
+                flex: 1,
                 child: TextScroll(getName(balanceElement["paidFor"]),
                 style: Style.headerStyle,
                 intervalSpaces: 10,
@@ -36,13 +37,20 @@ class BalanceListItem extends StatelessWidget {
                 pauseBetween: Duration(seconds: 1),
                 ),
               ),
-              const Text(" should send ",
-                  style: Style.subheaderStyle),
-              SizedBox(width: MediaQuery.of(context).size.width/2,),
-              Text(
-                balanceElement["amount"].toStringAsFixed(2).replaceAll(".",","),
-                style: Style.headerStyle,
-              )
+              Expanded(
+                flex: 6,
+                child: const Text(" should send ",
+                    style: Style.subheaderStyle),
+              ),
+              //SizedBox(width: MediaQuery.of(context).size.width/2,),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  balanceElement["amount"].toStringAsFixed(2).replaceAll(".",","),
+                  style: Style.headerStyle,
+                ),
+              ),
+              
             ],
           ),
           Row(
