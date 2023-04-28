@@ -14,8 +14,8 @@ class SideMenu extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: null,
-            accountEmail: Text(Authentication.getCurrentUser()?.email as String ?? ""),
+            accountName: const Text("Hello,"),
+            accountEmail: Text(Authentication.getCurrentUser()?.email ?? ""),
             decoration: const BoxDecoration(color: Colors.blue),
           ),
           ListTile(

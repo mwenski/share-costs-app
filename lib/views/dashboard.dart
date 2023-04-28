@@ -33,7 +33,7 @@ class _GroupDashboardState extends State<GroupDashboard> {
             ),
             title: const Text("Dashboard"),
           ),
-          drawer: SideMenu(),
+          endDrawer: const SideMenu(),
           body: TabBarView(children: [
             ExpenseTab(group: group),
             BalanceTab(group: group)

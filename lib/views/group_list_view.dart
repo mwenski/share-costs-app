@@ -20,16 +20,16 @@ class _GroupListViewState extends State<GroupListView> {
 
   @override
   Widget build(BuildContext context) {
-    void _navigateToNewGroupView() {
+    void navigateToNewGroupView() {
       Navigator.pushNamed(context, Routes.groupForm, arguments: {"formType": FormType.add});
     }
 
     return Scaffold(
       appBar: AppBar(title: const Text("Group List View")),
-      drawer: SideMenu(),
+      endDrawer: const SideMenu(),
       body: GroupList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToNewGroupView,
+        onPressed: navigateToNewGroupView,
         tooltip: "Add new group",
         child: const Icon(Icons.add),
       ),

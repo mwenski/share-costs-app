@@ -68,7 +68,8 @@ class _RegisterViewState extends State<RegisterView> {
                         confirmPasswordController.text);
                     Widgets.scaffoldMessenger(context, response, "Registered and logged in!");
                     if (response == null) {
-                      Navigator.pushNamed(context, Routes.group);
+                      Navigator.of(context).pushNamedAndRemoveUntil(Routes.group, (route) => false);
+                      //Navigator.pushNamed(context, Routes.group);
                     }
                   },
                   child: const Text('Create an account!'),

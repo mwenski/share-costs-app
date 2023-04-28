@@ -21,10 +21,6 @@ class _LoginViewState extends State<LoginView> {
       Navigator.pushNamed(context, Routes.register);
     }
 
-    // if(Authentication.getCurrentUser() != null){
-    //   Navigator.pushNamed(context, Routes.group);
-    // }
-
     return Scaffold(
         appBar: AppBar(title: const Text("Share Cost App - Login")),
         body: ListView(
@@ -62,7 +58,8 @@ class _LoginViewState extends State<LoginView> {
                     var response = await Authentication.signIn(emailController.text, passwordController.text);
                     Widgets.scaffoldMessenger(context, response, "Logged in!");
                     if (response == null){
-                      Navigator.pushNamed(context, Routes.group);
+                      Navigator.of(context).pushNamedAndRemoveUntil(Routes.group, (route) => false);
+                      //Navigator.pushNamed(context, Routes.group);
                     }
                   },
                   child: const Text('Login!'),

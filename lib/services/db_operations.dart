@@ -25,22 +25,23 @@ class DbOperations {
   }
 
   static String? addGroup(Group group) {
-    var result = null;
+    String? result;
     FirebaseFirestore.instance
         .collection('group')
         .add(group.toJson())
         .then((value) => print("Group Added"))
         .catchError((error) => result = "Failed to add group: $error");
-
     return result;
   }
 
-  static void addExpense(Expense expense) {
+  static String? addExpense(Expense expense) {
+    String? result;
     FirebaseFirestore.instance
         .collection('expenses')
         .add(expense.toJson())
         .then((value) => print("Expense Added"))
-        .catchError((error) => print("Failed to add expense: $error"));
+        .catchError((error) => result = "Failed to add expense: $error");
+    return result;
   }
 
   static List<Expense> getExpenses(AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -125,7 +126,7 @@ class DbOperations {
     FirebaseFirestore.instance
         .collection('expenses')
         .where('ownerId',
-        isEqualTo: Authentication.getCurrentUser()?.uid as String)
+            isEqualTo: Authentication.getCurrentUser()?.uid as String)
         .where('id', isEqualTo: expense.id)
         .get()
         .then((snapshot) {

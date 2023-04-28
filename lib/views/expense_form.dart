@@ -48,7 +48,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
       paidForValue = members[1].id;
     }
 
-    void addExpense() {
+    String? addExpense() {
+      var result;
       Expense newExpense = Expense(
           name: nameController.text,
           ownerId: Authentication.getCurrentUser()?.uid as String,
@@ -57,10 +58,12 @@ class _ExpenseFormState extends State<ExpenseForm> {
           paidBy: paidByValue,
           paidFor: paidForValue);
 
-      DbOperations.addExpense(newExpense);
+      result = DbOperations.addExpense(newExpense);
+      return result;
     }
 
-    void updateExpense() async {
+    Future<String?> updateExpense() async {
+      var result;
       Expense updatedExpense = Expense(
           id: expense?.id,
           name: nameController.text,
@@ -70,7 +73,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
           paidBy: paidByValue,
           paidFor: paidForValue);
 
-      await DbOperations.updateExpense(updatedExpense);
+      result = await DbOperations.updateExpense(updatedExpense);
+      return result;
     }
 
     void performOperation() {
@@ -80,20 +84,21 @@ class _ExpenseFormState extends State<ExpenseForm> {
         return;
       }
 
+      var response;
       if (formType == FormType.update){
-        updateExpense();
+        response = updateExpense();
         Navigator.pop(context);
-        Widgets.scaffoldMessenger(context, null, "Expense updated!");
+        Widgets.scaffoldMessenger(context, response, "Expense updated!");
       }else{
-        addExpense();
+        response = addExpense();
         Navigator.pop(context);
-        Widgets.scaffoldMessenger(context, null, "Expense added!");
+        Widgets.scaffoldMessenger(context, response, "Expense added!");
       }
     }
 
     return Scaffold(
         appBar: AppBar(title: Text(formType == FormType.update ? "Update expense" : "Add new expense")),
-        drawer: SideMenu(),
+        endDrawer: const SideMenu(),
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [

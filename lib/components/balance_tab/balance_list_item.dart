@@ -6,17 +6,16 @@ import 'package:share_cost_app/models/user_model.dart';
 
 class BalanceListItem extends StatelessWidget {
   const BalanceListItem(
-      {super.key,
-      required this.balanceElement,
-      required this.members});
+      {super.key, required this.balanceElement, required this.members});
 
   final Map<String, dynamic> balanceElement;
   final List<User> members;
 
   @override
   Widget build(BuildContext context) {
-    String getName(String id){
-      User? named = members.firstWhere((element) => element.id == id, orElse: () => User(name: "N.N."));
+    String getName(String id) {
+      User? named = members.firstWhere((element) => element.id == id,
+          orElse: () => User(name: "N.N."));
       return named.name;
     }
 
@@ -29,36 +28,50 @@ class BalanceListItem extends StatelessWidget {
           Row(
             children: [
               Flexible(
-                flex: 1,
-                child: TextScroll(getName(balanceElement["paidFor"]),
-                style: Style.headerStyle,
-                intervalSpaces: 10,
-                velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
-                pauseBetween: Duration(seconds: 1),
-                ),
-              ),
-              Expanded(
-                flex: 6,
-                child: const Text(" should send ",
-                    style: Style.subheaderStyle),
-              ),
-              //SizedBox(width: MediaQuery.of(context).size.width/2,),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  balanceElement["amount"].toStringAsFixed(2).replaceAll(".",","),
+                flex: 2,
+                child: TextScroll(
+                  getName(balanceElement["paidFor"]),
                   style: Style.headerStyle,
+                  intervalSpaces: 10,
+                  velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
+                  pauseBetween: Duration(seconds: 1),
                 ),
               ),
-              
+              Expanded(
+                flex: 68,
+                child: Container(
+                  child: Row(
+                    children: [
+                      const Text(" should send ", style: Style.subheaderStyle),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2,
+                      ),
+                      Text(
+                          balanceElement["amount"]
+                              .toStringAsFixed(2)
+                              .replaceAll(".", ","),
+                          style: Style.headerStyle),
+                    ],
+                  ),
+                ),
+              ),
+              // Expanded(
+              //   flex: 2,
+              //   child: Text(
+              //     balanceElement["amount"]
+              //         .toStringAsFixed(2)
+              //         .replaceAll(".", ","),
+              //     style: Style.headerStyle,
+              //   ),
+              // ),
             ],
           ),
           Row(
             children: [
-              const Text("to ",
-                  style: Style.subheaderStyle),
+              const Text("to ", style: Style.subheaderStyle),
               Flexible(
-                child: TextScroll(getName(balanceElement["paidBy"]),
+                child: TextScroll(
+                  getName(balanceElement["paidBy"]),
                   style: Style.headerStyle,
                   intervalSpaces: 10,
                   velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
