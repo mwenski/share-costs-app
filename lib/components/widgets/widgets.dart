@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 abstract class Widgets {
   static void scaffoldMessenger(
-      BuildContext context, String? result, String ifCorrect) {
+      BuildContext context, String? ifNotCorrect, String ifCorrect) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: result == null ? Colors.green : Colors.red,
-        content: Text(result ?? ifCorrect)));
+        backgroundColor: ifNotCorrect == null ? Colors.green : Colors.red,
+        content: Text(ifNotCorrect ?? ifCorrect)));
   }
 
   static Future<bool?> alertDialog(BuildContext context, String alertTitle,

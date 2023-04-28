@@ -17,30 +17,30 @@ class GroupForm extends StatefulWidget {
 
 class _GroupFormState extends State<GroupForm> {
   List<TextEditingController> memberControllers = <TextEditingController>[];
+  Map<TextEditingController, String> memberIds = {};
 
+  String? groupId;
   bool flag = true;
 
   var nameController = TextEditingController();
   var descriptionController = TextEditingController();
-  String? groupId;
 
   void _addNewMemberToList() {
-    print("object");
     setState(() {
       memberControllers.add(TextEditingController());
     });
   }
 
-  void _removeLastMemberFromList() {
-    if (memberControllers.length <= 2) {
-      Widgets.scaffoldMessenger(
-          context, "Group cannot have less than 2 members!", "");
-      return;
-    }
-    setState(() {
-      memberControllers.removeLast();
-    });
-  }
+  // void _removeLastMemberFromList() {
+  //   if (memberControllers.length <= 2) {
+  //     Widgets.scaffoldMessenger(
+  //         context, "Group cannot have less than 2 members!", "");
+  //     return;
+  //   }
+  //   setState(() {
+  //     memberControllers.removeLast();
+  //   });
+  // }
 
   void _removeMemberFromList(TextEditingController memberController) {
     if (memberControllers.length <= 2) {
@@ -50,6 +50,9 @@ class _GroupFormState extends State<GroupForm> {
     }
     setState(() {
       memberControllers.remove(memberController);
+      if(memberIds.containsKey(memberController)){
+        memberIds.remove(memberController);
+      }
     });
   }
 
@@ -73,7 +76,8 @@ class _GroupFormState extends State<GroupForm> {
         name: nameController.text,
         description: descriptionController.text,
         members: memberControllers
-            .map((memberController) => User(name: memberController.text))
+            .map((memberController) => User(
+                id: memberIds[memberController], name: memberController.text))
             .toList());
 
     var response = await DbOperations.updateGroup(updatedGroup);
@@ -82,7 +86,6 @@ class _GroupFormState extends State<GroupForm> {
 
   @override
   Widget build(BuildContext context) {
-
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final FormType formType = arguments["formType"];
@@ -95,9 +98,11 @@ class _GroupFormState extends State<GroupForm> {
       nameController = TextEditingController(text: group.name);
       descriptionController = TextEditingController(text: group.description);
       group.members.forEach((element) {
-        memberControllers.add(TextEditingController(text: element.name));
+        var memberController = TextEditingController(text: element.name);
+        memberControllers.add(memberController);
+        memberIds[memberController] = element.id;
       });
-    }else if(flag){
+    } else if (flag) {
       memberControllers = <TextEditingController>[
         TextEditingController(),
         TextEditingController()
@@ -107,7 +112,10 @@ class _GroupFormState extends State<GroupForm> {
     flag = false;
 
     return Scaffold(
-        appBar: AppBar(title: Text(formType==FormType.update? "Update group" : "Add new group")),
+        appBar: AppBar(
+            title: Text(formType == FormType.update
+                ? "Update group"
+                : "Add new group")),
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [
@@ -140,7 +148,9 @@ class _GroupFormState extends State<GroupForm> {
                 Row(
                   children: [
                     Text(
-                      formType == FormType.update? "Update members:" : "Add members:",
+                      formType == FormType.update
+                          ? "Update members:"
+                          : "Add members:",
                       style: Style.subheaderStyle,
                     ),
                     const Spacer(),
@@ -154,26 +164,26 @@ class _GroupFormState extends State<GroupForm> {
                   runSpacing: 10.0,
                   children: memberControllers
                       .map((memberController) => Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: memberController,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Member Name',
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: memberController,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Member Name',
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                _removeMemberFromList(memberController);
-                              },
-                              icon: Icon(Icons.close),
-                              tooltip: "Remove member",
-                              color: Colors.red,
-                              iconSize: 30),
-                        ],
-                      ))
+                              IconButton(
+                                  onPressed: () {
+                                    _removeMemberFromList(memberController);
+                                  },
+                                  icon: Icon(Icons.close),
+                                  tooltip: "Remove member",
+                                  color: Colors.red,
+                                  iconSize: 30),
+                            ],
+                          ))
                       .toList(),
                 ),
                 const SizedBox(
@@ -184,10 +194,10 @@ class _GroupFormState extends State<GroupForm> {
                     TextButton(
                         onPressed: _addNewMemberToList,
                         child: const Text("Add member")),
-                    const Spacer(),
-                    TextButton(
-                        onPressed: _removeLastMemberFromList,
-                        child: const Text("Remove member"))
+                    // const Spacer(),
+                    // TextButton(
+                    //     onPressed: _removeLastMemberFromList,
+                    //     child: const Text("Remove member"))
                   ],
                 ),
                 const SizedBox(
@@ -198,10 +208,15 @@ class _GroupFormState extends State<GroupForm> {
                   height: 60,
                   child: ElevatedButton(
                     onPressed: () async {
-                      formType == FormType.update? await {updateGroup()} : {addGroup()};
+                      formType == FormType.update
+                          ? await {updateGroup()}
+                          : {addGroup()};
                       Navigator.pop(context);
                     },
-                    child: Text(formType==FormType.update? "Update group" : "Create new group",
+                    child: Text(
+                        formType == FormType.update
+                            ? "Update group"
+                            : "Create new group",
                         style: const TextStyle(fontSize: 18)),
                   ),
                 ),
